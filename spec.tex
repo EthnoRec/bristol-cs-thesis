@@ -11,10 +11,24 @@ Popular social networks such as Facebook would be ideal for this, however it is 
 a list of profiles from a hand-picked location due to Facebook API constraints. Moreover, it is clearly 
 stated in Facebook's Terms and Conditions that any way to circumvent these constraints would still count as a violation.
 
-There was, however, a mobile dating application called Tinder had a documented API that makes it possible to fetch users 
-close to user-specified GPS location.
 
 \subsection{Tinder}
+Tinder is a mobile dating application that shows profiles closest to the user's GPS location. 
+There have been numerous third-party Tinder utilities on the Web that reverse-engineered Tinder's simple 
+and unobfuscated HTTP API that makes it possible to create a fully-featured Tinder client yourself.
+
+The API has support for various actions such as liking and messaging users, but for the purposes of this project, 
+the only relevant actions to us are authentication, setting own location using 
+latitude and longitude coordinates and fetching nearby users.
+
+\subsubsection{Authentication}
+Tinder profiles are created using Facebook OAuth. When the application is opened for the first time by a non-registered user,
+they will be prompted to login using Facebook OAuth which gives Tinder access to the user's full name, age, pictures and other details.
+
+A user profile was created specifically for this project using the original Tinder mobile application on an Android phone. 
+This made it possible to authenticate with Tinder using Facebook OAuth which takes Tinder's 
+application ID and upon successful Facebook authentication returns an authentication token that is sent with every Tinder API request.
+
 
 \section{Face and landmark detection}
 
