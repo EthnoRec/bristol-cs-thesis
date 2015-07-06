@@ -21,14 +21,75 @@ The API has support for various actions such as liking and messaging users, but 
 the only relevant actions to us are authentication, setting own location using 
 latitude and longitude coordinates and fetching nearby users.
 
-\subsubsection{Authentication}
+\subsection{Authentication}
 Tinder profiles are created using Facebook OAuth. When the application is opened for the first time by a non-registered user,
 they will be prompted to login using Facebook OAuth which gives Tinder access to the user's full name, age, pictures and other details.
 
 A user profile was created specifically for this project using the original Tinder mobile application on an Android phone. 
-This made it possible to authenticate with Tinder using Facebook OAuth which takes Tinder's 
-application ID and upon successful Facebook authentication returns an authentication token that is sent with every Tinder API request.
 
+A Google Chrome extention was written in order to obtain an authentication token for the Tinder app on Facebook which must be
+sent with every request to the Tinder API. The extension adds a button to the Google Chrome toolbar which opens a static webpage that
+sends a request back to the extension to open the following URL:
+\begin{logs}
+https://www.facebook.com/v2.0/dialog/oauth
+    ?response_type=token
+    &display=popup
+    &api_key=464891386855067
+    &redirect_uri=fbconnect%3A%2F%2Fsuccess
+    &scope=user_about_me%2Cuser_activities%2Cuser_education_history%2Cuser_location%2Cuser_photos%2Cuser_relationship_details%2Cuser_status'
+\end{logs}
+where \texttt{api\_key} specifies the Tinder application ID on Facebook and \texttt{scope} lists the type of information Tinder will gain access to.
+This page asks the user to sign in with their Facebook credentials and, if successful, will save a cookie that will be sent along with the next request:
+
+\begin{logs}
+POST https://www.facebook.com/v2.0/dialog/oauth/confirm
+
+{
+  "app_id: "464891386855067",
+  "ttstamp: "2658170904850115701205011500",
+  "redirect_uri": "fbconnect://success",
+  "return_format": "access_token",
+  "from_post": 1,
+  "display": "popup",
+  "gdp_version": 4,
+  "sheet_name": "initial",
+  "__CONFIRM__": 1
+}
+\end{logs}
+The response to this will contain an access token that will be used to interact with the Tinder API. It can be extracted 
+using 
+\begin{logs}
+    access_token=([\w_]+)&
+\end{logs} 
+as a regular expression. It will be referred to as \texttt{<fb\_token>} from this point on.
+
+Before we can use it to authenticate with Tinder the Facebook user ID must also be obtained by accessing \texttt{https://graph.facebook.com/me?access\_token=\textbf{<access\_token>}}.
+The response to this request is a JSON object which contains the Facebook user ID under the property \texttt{id}, which will be known as \texttt{<fb\_user\_id>}.
+
+%\begin{logs}
+%POST https://api.gotinder.com/auth
+
+%{
+    %"facebook_token": fb_token, 
+    %"facebook_id": fb_user_id
+%}
+%\end{logs}
+
+
+%This made it possible to authenticate with Tinder using Facebook OAuth which takes Tinder's 
+%application ID and upon successful Facebook authentication returns an authentication token that is sent with every Tinder API request.
+
+
+
+\subsection{Updating location}
+Updating the location of the user profile is simply a matter of sending the new latitude and longitude 
+via a \texttt{POST} request to a profile change resource. The only limitation is that it is not possible to change the location too
+frequently if the distance between the new and the old locations is too large to be travelled in the amount of time passed.
+
+\subsection{Fetching profiles and images}
+
+\subsection{Tinder job manager}
+Tool to manage Tinder jobs.
 
 \section{Face and landmark detection}
 
