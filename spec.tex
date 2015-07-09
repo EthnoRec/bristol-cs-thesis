@@ -57,17 +57,23 @@ POST https://www.facebook.com/v2.0/dialog/oauth/confirm
   "__CONFIRM__": 1
 }
 \end{logs}
-The response to this will contain an access token that will be used to interact with the Tinder API. It can be extracted 
-using 
+The response to this will contain an access token that will be used to 
+interact with the Tinder API. It can be extracted using 
 \begin{logs}
     access_token=([\w_]+)&
 \end{logs} 
-as a regular expression. It will be referred to as \texttt{<fb\_token>} from this point on.
+as a regular expression. It will be referred to as \texttt{<fb\_token>} from 
+this point on.
 
-Before we can use it to authenticate with Tinder the Facebook user ID must also be obtained by accessing \texttt{https://graph.facebook.com/me?access\_token=\textbf{<access\_token>}}.
-The response to this request is a JSON object which contains the Facebook user ID under the property \texttt{id}, which will be known as \texttt{<fb\_user\_id>}.
+Before we can use it to authenticate with Tinder the Facebook user ID must 
+also be obtained by accessing 
+\texttt{https://graph.facebook.com/me?access\_token=\textbf{<access\_token>}}.
+The response to this request is a JSON object which contains the Facebook user 
+ID under the property \texttt{id}, which will be known as 
+\texttt{<fb\_user\_id>}.
 
-Now that we have the Facebook user ID and User Access Token it is possible to authenticate with Tinder as follows:
+Now that we have the Facebook user ID and User Access Token it is possible to 
+authenticate with Tinder as follows:
 
 \begin{logs}
 POST https://api.gotinder.com/auth
@@ -104,6 +110,38 @@ and the old locations is too large to be travelled in the amount of time
 passed.
 
 \subsection{Fetching profiles and images}
+User profiles are internally referred to as \textit{recommendations} by Tinder and 
+can be retrieved using the following \texttt{POST} request:
+\begin{logs}
+POST https://api.gotinder.com/user/recs
+
+{
+    "limit": <job_limit>
+}
+\end{logs}
+The \texttt{limit} option refers to the maximum number of users that can be 
+fetched at once. The value for \texttt{limit} comes from the corresponding 
+data collection job (\ref{spec:data:jobs}).
+
+The JSON response contains a property called \texttt{results} which is an 
+array of profiles (\texttt{Array<Profile>}). Every profile contains the 
+following properties relevant to this project:
+\begin{table}
+    \begin{center}
+        \begin{tabular}{| l | c | c |}
+            \hline
+            Property       & Data type               & Example \\ \hline
+            distance\_mi    & integer                 & 2 \\ \hline
+            \_id            & char[24]                & 518d666a2a00df0e490000b9 \\ \hline
+            birth\_date     & RFC 3339 date and time  & 1986-05-17T00:00:00.000Z \\ \hline
+            gender         & integer                 & 1 \\ \hline
+            name           & string                  & Elen \\ \hline
+        \end{tabular}
+    \end{center}
+    \caption{Properties of a Tinder profile response. Properties not used in 
+    this project have been stripped out.}
+\end{table}
+
 
 \subsection{Tinder job manager}
 \label{spec:data:jobs}
