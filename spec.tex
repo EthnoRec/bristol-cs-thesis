@@ -1,9 +1,10 @@
 \chapter{Specification and system design}
 \label{spec}
 \section{Data collection}
-The quantity and the quality of training data is crucial to all computer vision projects. 
-However, for this task there was no luxury of using an existing dataset with 
-the required level of detail in labels that would also be affordable.
+The quantity and the quality of training data is crucial to all computer vision 
+projects. However, for this task there was no luxury of using an existing 
+dataset with the required level of detail in labels that would also be 
+affordable.
 
 A decision was made to collect own data for this project from a social network that 
 makes it easy to associate user profiles with photos of themselves with locations accurate to city-level.
@@ -66,29 +67,46 @@ as a regular expression. It will be referred to as \texttt{<fb\_token>} from thi
 Before we can use it to authenticate with Tinder the Facebook user ID must also be obtained by accessing \texttt{https://graph.facebook.com/me?access\_token=\textbf{<access\_token>}}.
 The response to this request is a JSON object which contains the Facebook user ID under the property \texttt{id}, which will be known as \texttt{<fb\_user\_id>}.
 
-%\begin{logs}
-%POST https://api.gotinder.com/auth
+Now that we have the Facebook user ID and User Access Token it is possible to authenticate with Tinder as follows:
 
-%{
-    %"facebook_token": fb_token, 
-    %"facebook_id": fb_user_id
-%}
-%\end{logs}
+\begin{logs}
+POST https://api.gotinder.com/auth
 
+{
+    "facebook_token": <access_token>, 
+    "facebook_id": <fb_user_id>
+}
+\end{logs}
 
-%This made it possible to authenticate with Tinder using Facebook OAuth which takes Tinder's 
-%application ID and upon successful Facebook authentication returns an authentication token that is sent with every Tinder API request.
-
+The response to this request is a JSON object containing Tinder's own 
+authentication token and user ID. Tinder's authentication token is saved in 
+memory and sent as an HTTP header \texttt{X-Auth-Token} with every request 
+after authentication.
 
 
 \subsection{Updating location}
-Updating the location of the user profile is simply a matter of sending the new latitude and longitude 
-via a \texttt{POST} request to a profile change resource. The only limitation is that it is not possible to change the location too
-frequently if the distance between the new and the old locations is too large to be travelled in the amount of time passed.
+Updating the location of the user profile is simply a matter of sending the 
+new latitude and longitude values via a \texttt{POST} request as follows:
+\begin{logs}
+POST https://api.gotinder.com/user/ping
+
+{
+    "lat": <new_latitude>
+    "lon": <new_longitude>
+}
+\end{logs}
+This is performed after authentication with latitude and longitude as 
+specified in the data collection job (see \ref{spec:data:jobs}).
+
+The limitation with this method of changing own location is that it is not 
+possible to change the location too frequently if the distance between the new 
+and the old locations is too large to be travelled in the amount of time 
+passed.
 
 \subsection{Fetching profiles and images}
 
 \subsection{Tinder job manager}
+\label{spec:data:jobs}
 Tool to manage Tinder jobs.
 
 \section{Face and landmark detection}
