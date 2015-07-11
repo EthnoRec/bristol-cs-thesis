@@ -124,28 +124,72 @@ fetched at once. The value for \texttt{limit} comes from the corresponding
 data collection job (\ref{spec:data:jobs}).
 
 The JSON response contains a property called \texttt{results} which is an 
-array of profiles (\texttt{Array<Profile>}). Every profile contains the 
-following properties relevant to this project:
+array of profiles (\texttt{Array<Profile>}). Every profile contains properties 
+as specified in Table \ref{table:profile-properties}.
 \begin{table}
     \begin{center}
         \begin{tabular}{| l | c | c |}
             \hline
             Property       & Data type               & Example \\ \hline
-            distance\_mi    & integer                 & 2 \\ \hline
-            \_id            & char[24]                & 518d666a2a00df0e490000b9 \\ \hline
-            birth\_date     & RFC 3339 date and time  & 1986-05-17T00:00:00.000Z \\ \hline
+            distance\_mi   & integer                 & 2 \\ \hline
+            \_id           & char[24]                & 518d666a2a00df0e490000b9 \\ \hline
+            birth\_date    & RFC 3339 date and time  & 1986-05-17T00:00:00.000Z \\ \hline
             gender         & integer                 & 1 \\ \hline
             name           & string                  & Elen \\ \hline
+            photos         & Array<Photo>            & N/A \\ \hline
         \end{tabular}
     \end{center}
-    \caption{Properties of a Tinder profile response. Properties not used in 
-    this project have been stripped out.}
+    \caption{Properties of a Tinder profile as retrieved using the API. 
+        Properties not used in this project have been stripped out.}
+    \label{table:profile-properties}
 \end{table}
+% "url": "http://images.gotinder.com/518d666a2a00df0e490000b9/fea4f480-7ce0-4143-a310-a03c2b2cdbc6.jpg"
+Table \ref{table:photo-properties} shows the relevant properties of profile 
+photos.
 
+
+\begin{table}
+    \begin{center}
+        \begin{tabular}{| l | c | c |}
+            \hline
+            Property       & Data type               & Example \\ \hline
+            \_id           & UUID                    & fea4f480-7ce0-4143-a310-a03c2b2cdbc6 \\ \hline
+            fileName       & string                  & fea4f480-7ce0-4143-a310-a03c2b2cdbc6.jpg \\ \hline
+            extension      & string                  & jpg \\ \hline
+            url            & URL                     & http://images.gotinder.com/<profile\_id>/<image\_id>.jpg \\ \hline
+        \end{tabular}
+    \end{center}
+    \caption{Properties of a Tinder image as retrieved using the API. 
+        Properties not used in this project have been stripped out.}
+    \label{table:photo-properties}
+\end{table}
+The request above is performed every \texttt{<delay>} seconds, the value for 
+which is specified as part of a data collection job (see \ref{spec:data:jobs}).
 
 \subsection{Tinder job manager}
 \label{spec:data:jobs}
 Tool to manage Tinder jobs.
+Images of people need to be collected from a number of different locations 
+around the world. Specifying the coordinates of each location using latitude 
+and longitude values proved to be cumbersome in the beginning which is why a 
+special and user-friendly tool was written to manage data collection from the 
+command line.
+
+This tool resides in the \texttt{tinder-gather} project in the \texttt{tools} 
+directory. Usage and help will be displayed in the terminal if ran with these 
+arguments:
+\begin{logs}
+./jobs.js tjob post
+\end{logs}
+
+This command expects three arguments: location, limit and delay. Location is 
+just a city name whose location is hard-coded inside the script and can be 
+easily extended. This argument is required. Limit refers to the maximum number 
+of profiles to fetch from Tinder at once and delay specifies how frequently 
+they will be fetched.
+
+This tool is also used to manage face and landmark detection jobs which will 
+be described in detail in Section \ref{unknown:facedetection}. 
 
 \section{Face and landmark detection}
 
