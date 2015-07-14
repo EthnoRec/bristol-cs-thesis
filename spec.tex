@@ -35,14 +35,20 @@ A user profile was created specifically for this project using the original
 Tinder mobile application on an Android phone. 
 
 \subsection{Profile metadata and photo collection}
-A web application was written to mimic the Tinder app whose only purpose was 
+A web application (\texttt{tinder-gather}) was written to mimic the Tinder app whose only purpose was 
 to record profile metadata such as name, location and date birth as well as 
 to save user-uploaded pictures. 
 
-This web applications provides an API that allows an external tool 
+This web application provides an API that allows an external tool 
 (\ref{spec:data:jobs}) to easily change the location of the user for this 
 application so that images are collected from several different 
 countries.
+
+The web application must be used with a complementary Chrome extension 
+(\texttt{tinder-gather-connect}) that handles Facebook authentication.
+Once the extension is installed a button to launch the app will appear in the 
+toolbar. As soon as the user signs in the app will be ready to accept data 
+collection jobs from the Tinder job manager tool (\ref{spec:data:jobs}).
 
 \subsection{Tinder job manager}
 \label{spec:data:jobs}
@@ -70,13 +76,35 @@ be described in detail in Section \ref{spec:fd}.
 
 \section{Face and landmark detection}
 \label{spec:fd}
-Before the collected images from different parts of the world could be used to
-learn how to determine the location of a person from a single picture of 
-their face they must first be heavily filtered as many Tinder users upload
-very low-quality pictures or even pictures of pets and inanimate objects.
+Before the collected pictures of faces from different parts of the world 
+could be used to learn how to determine the location of a person from a single 
+picture of their face they must first be heavily filtered as many Tinder users 
+upload very low-quality pictures or even pictures of pets and inanimate 
+objects.
 
 A face detector is an ideal method of filtering out non-face images as well as
-heavily edited or poor quality face images. 
+heavily edited or poor quality face pictures. 
+
+Viola-Jones is the most popular choice for face detection due to its 
+incredible performance and native implementation in OpenCV, but it falls 
+behind some other face detection algorithms such as those used by 
+Google Picasa and face.com.
+
+Unfortunately, Google Picasa and face.com use closed-source 
+solutions making them unsuitable for use in this project. However, it was 
+discovered that there is an open face detection model that comes very close 
+to these commercial algorithms and significantly outperforms Viola-Jones at
+the face detection task.
+
+The model can also be trained to learn landmark localisation and face angle, 
+which provide additional information that enables us to further filter and 
+preprocess the images collected from Tinder profiles. This is important 
+because being able to estimate the locations of certain landmarks such as eyes 
+makes it possible to scale and rotate images so that the landmarks line up.
+
+Another advantage of this particular solution is that it comes with 
+pre-trained on the MultiPIE dataset which needs to be purchased. 
+
 ...
 \section{Preprocessing}
 \label{spec:preproc}
