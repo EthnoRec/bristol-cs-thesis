@@ -161,6 +161,10 @@ Maximisation over $L$ is performed using dynamic programming.
 
 \section{Preprocessing}
 \label{spec:preproc}
+\newcommand{\vleftright}{\vec{v}_i^{\text{left} \rightarrow \text{right}}}
+\newcommand{\vi}[1]{\vec{v}_i^{\text{#1}}}
+\newcommand{\vr}[1]{\vec{v}_{\text{ref}}^{\text{#1}}}
+\newcommand{\vref}{\vec{v}_{\text{ref}}^{\text{left} \rightarrow \text{right}}}
 The problem with using unprocessed Tinder profile pictures is that they are 
 taken at a variety of different angles and scales. Before these pictures can 
 be used to train a classifier they must first be transformed so that they all 
@@ -168,13 +172,51 @@ have the same angle and scale. This was done by using previously detected
 locations of eyes as reference points so that they always appear in the same 
 location in the image. 
 
+Throughout this section $\vi{left}$ and $\vi{right}$ will refer to the
+coordinates of the left and right eyes, respectively, in the original image.
+Vector $\vleftright$ passes through the locations of detected eyes in the image
+and is defined as $\vleftright = \vi{right} - \vi{left}$. Vectors
+$\vr{left}$ and $\vr{right}$ are our target eye locations to which all images
+will be mapped.
+
+Computing a rotation matrix is the first step in performing an affine transform
+to ensure that all faces have the same rotation and scale. Before it can be 
+computed we must first calculate the rotation angle $\theta$, scaling factor
+$s$ and centre of the rotation $\vec{c}$ in the original image.
+
 \begin{equation}
-\label{eq:a}
-\alpha = \arccos{\frac{v_{i} \cdot v_{ref}}{|v_{i}| |v_{ref}|}}
+    \label{eq:spec:preproc:angle}
+    \theta = -\arccos{\frac{\vleftright \cdot \vref}{|\vleftright| |\vref|}}
+\end{equation}
+Angle $\theta$ is rotation of the original face relative to the target face
+location and can be calculated as the angle between vectors $\vref$ and
+$\vleftright$ using the definiton of the dot product.
+
+\begin{equation}
+    \label{eq:spec:preproc:scales}
+    s = \frac{|\vref|}{|\vleftright|}
 \end{equation}
 
+\begin{equation}
+    \label{eq:spec:preproc:centre}
+    \vec{c} = \frac{\vi{left} + \vi{right}}{2}
+\end{equation}
+The original image should be rotated around the midpoint of $\vi{left}$ and $\vi{right}$.
 
- 
+\begin{equation}
+    \vec{t} = \frac{\vi{left} + \vi{right}}{2} - \frac{\vr{left} + \vr{right}}{2}
+\end{equation}
+After rotating the original image as described it will be translated so that 
+the eyes appear in the intended location.
+
+\begin{equation}
+    \begin{bmatrix}
+    \alpha & \beta  & (1-\alpha)\cdot \vec{c}_x - \beta \cdot \vec{c}_y + \vec{t}_x \\
+    -\beta & \alpha & \beta \cdot \vec{c}_x + (1-\alpha)\cdot \vec{c}_y + \vec{t}_y
+    \end{bmatrix}
+\end{equation}
+where $\alpha = s\cos\theta$ and $\beta = s\sin\theta$.
+
 \section{Feature extraction}
 
 
