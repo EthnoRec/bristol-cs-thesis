@@ -126,15 +126,37 @@ The locations of each part ($L = {l_i : i \in V}$) can be scored as follows:
     \text{Shape}_m(L) = \sum_{ij \in E_m} a_{ij}^m dx^2 + b_{ij}^m dx + c_{ij}^mdy^2 + d_{ij}^m dy 
 \end{flalign}
 
-Equation \ref{eq:spec:fd:App} computes the appearance evidence of part $i$ 
-using template $w_i^m$ which is tuned for mixture/viewpoint $m$. $\phi(I,l_i)$ 
-is the feature vector (e.g. Histogram of oriented gradients) at location $l_i$ 
+Equation \ref{eq:spec:fd:App} computes the appearance evidence of part $i$
+using template $w_i^m$ which is tuned for mixture/viewpoint $m$. $\phi(I,l_i)$
+is the feature vector (e.g. Histogram of oriented gradients) at location $l_i$
 of image $I$.
 
-In Equation \ref{eq:spec:fd:Shape} $dx = x_i  - x_j$ and $dy = y_i - y_j$ correspond to $x$ and $y$ 
-displacements of part $i$ relative to part $j$. "Each term in the sum can be 
-interpreted as a spring that introduces spatial constraints between a pair of parts,
-where the parameters $(a,b,c,d)$ specify the rest location and rigidity of each spring." \citep{zhu2012face}
+In Equation \ref{eq:spec:fd:Shape} $dx = x_i  - x_j$ and $dy = y_i - y_j$
+correspond to $x$ and $y$ displacements of part $i$ relative to part $j$. "Each
+term in the sum can be interpreted as a spring that introduces spatial
+constraints between a pair of parts, where the parameters $(a,b,c,d)$ specify
+the rest location and rigidity of each spring." \citep{zhu2012face}
+The $\alpha^m$ term refers to the bias of viewpoint mixture $m$. 
+
+The score from equation \ref{eq:spec:fd:S} was used to determine which face 
+detection results were the most reliable and suitable for this project.
+
+The objective of the learning stage is to maximise $S(I,L,m)$ in Equation
+\ref{eq:spec:fd:S} over $L$ and $m$, i.e:
+\begin{equation}
+\label{eq:spec:fd:maxS}
+S^*(I) = \max_m[\max_L S(I,L,m)]
+\end{equation}
+
+Equation \ref{eq:spec:fd:maxS} implies that for every mixture/viewpoint we find
+the best set of part/facial landmark locations $L$ as scored by Equation
+\ref{eq:spec:fd:S} and then choose the mixture with the highest score received.
+Maximisation over $L$ is performed using dynamic programming.
+
+\begin{itemize}
+    \item Learning (?)
+    \item Results comparison
+\end{itemize}
 
 
 \section{Preprocessing}
