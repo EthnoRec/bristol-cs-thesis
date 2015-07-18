@@ -1,0 +1,164 @@
+\chapter{Specification and system design}
+\label{spec}
+\section{Data collection}
+The quantity and the quality of training data is crucial to all computer vision 
+projects. However, for this task there was no luxury of using an existing 
+dataset with the required level of detail in labels that would also be 
+affordable.
+
+A decision was made to collect own data for this project from a social network 
+that makes it easy to associate user profiles with photos of themselves with 
+locations accurate to city-level. Popular social networks such as Facebook 
+would be ideal for this, however it is not possible to obtain a list of 
+profiles from a hand-picked location due to Facebook API constraints. 
+Moreover, it is clearly stated in Facebook's Terms and Conditions that any way 
+to circumvent these constraints would still count as a violation.
+
+
+\subsection{Tinder}
+Tinder is a mobile dating application that shows profiles closest to the 
+user's GPS location. There have been numerous third-party Tinder utilities on 
+the Web that reverse-engineered Tinder's simple and unobfuscated HTTP API that 
+makes it possible to create a fully-featured Tinder client yourself.
+
+The API has support for various actions such as liking and messaging users, 
+but for the purposes of this project, the only relevant actions to us are 
+authentication, setting own location using latitude and longitude coordinates 
+and fetching nearby users.
+
+Tinder profiles are created using Facebook Login. When the application is 
+opened for the first time by a non-registered user, they will be prompted to 
+login using their Facebook account which gives Tinder access to the user's full name, 
+age, pictures and other details.
+
+A user profile was created specifically for this project using the original 
+Tinder mobile application on an Android phone. 
+
+\subsection{Profile metadata and photo collection}
+A web application (\texttt{tinder-gather}) was written to mimic the Tinder app whose only purpose was 
+to record profile metadata such as name, location and date birth as well as 
+to save user-uploaded pictures. 
+
+This web application provides an API that allows an external tool 
+(\ref{spec:data:jobs}) to easily change the location of the user for this 
+application so that images are collected from several different 
+countries.
+
+The web application must be used with a complementary Chrome extension 
+(\texttt{tinder-gather-connect}) that handles Facebook authentication.
+Once the extension is installed a button to launch the app will appear in the 
+toolbar. As soon as the user signs in the app will be ready to accept data 
+collection jobs from the Tinder job manager tool (\ref{spec:data:jobs}).
+
+\subsection{Tinder job manager}
+\label{spec:data:jobs}
+Images of people need to be collected from a number of different locations 
+around the world. Specifying the coordinates of each location using latitude 
+and longitude values proved to be cumbersome in the beginning which is why a 
+special and user-friendly tool was written to manage data collection from the 
+command line.
+
+This tool resides in the \texttt{tinder-gather} project in the \texttt{tools} 
+directory. Usage and help will be displayed in the terminal if ran with these 
+arguments:
+\begin{logs}
+./jobs.js tjob post
+\end{logs}
+
+This command expects three arguments: location, limit and delay. Location is 
+just a city name whose location is hard-coded inside the script and can be 
+easily extended. This argument is required. Limit refers to the maximum number 
+of profiles to fetch from Tinder at once and delay specifies how frequently 
+they will be fetched.
+
+This tool is also used to manage face and landmark detection jobs which will 
+be described in detail in Section \ref{spec:fd}. 
+
+\section{Face and landmark detection}
+\label{spec:fd}
+Before the collected pictures of faces from different parts of the world 
+could be used to learn how to determine the location of a person from a single 
+picture of their face they must first be heavily filtered as many Tinder users 
+upload very low-quality pictures or even pictures of pets and inanimate 
+objects.
+
+A face detector is an ideal method of filtering out non-face images as well as
+heavily edited or poor quality face pictures. 
+
+Viola-Jones is the most popular choice for face detection due to its 
+incredible performance and native implementation in OpenCV, but it falls 
+behind some other face detection algorithms such as those used by 
+Google Picasa and face.com.
+
+Unfortunately, Google Picasa and face.com use closed-source 
+solutions making them unsuitable for use in this project. However, it was 
+discovered that there is an open face detection model that comes very close 
+to these commercial algorithms and significantly outperforms Viola-Jones at
+the face detection task.
+
+The model can also be trained to learn landmark localisation and face angle, 
+which provide additional information that enables us to further filter and 
+preprocess the images collected from Tinder profiles. This is important 
+because being able to estimate the locations of certain landmarks such as eyes 
+makes it possible to scale and rotate images so that the landmarks line up.
+
+Another advantage of this particular solution is that it comes with 
+pre-trained on the MultiPIE dataset which otherwise would need to be purchased. 
+
+\subsection{Face, landmark and pose detection using mixture of trees and HoG}
+In this model, there is a shared pool of facial landmarks encoded as parts and denoted $V$.
+Every viewpoint is modelled as a tree-structured pictorial structure $T_m = (V_m, E_m)$
+where $E_m$ is a set of edges and $V_m \in V$.
+
+The locations of each part ($L = {l_i : i \in V}$) can be scored as follows:
+\begin{flalign}
+    \label{eq:spec:fd:S}
+    S(I,L,m) = \text{App}_m(I,L) + \text{Shape}_m(L) + \alpha^m 
+\end{flalign}
+
+\begin{flalign}
+    \label{eq:spec:fd:App}
+    \text{App}_m(I,L) = \sum_{i \in V_m} w_i^m \cdot \phi(I,l_i) 
+\end{flalign}
+
+\begin{flalign}
+    \label{eq:spec:fd:Shape}
+    \text{Shape}_m(L) = \sum_{ij \in E_m} a_{ij}^m dx^2 + b_{ij}^m dx + c_{ij}^mdy^2 + d_{ij}^m dy 
+\end{flalign}
+
+Equation \ref{eq:spec:fd:App} computes the appearance evidence of part $i$ 
+using template $w_i^m$ which is tuned for mixture/viewpoint $m$. $\phi(I,l_i)$ 
+is the feature vector (e.g. Histogram of oriented gradients) at location $l_i$ 
+of image $I$.
+
+In Equation \ref{eq:spec:fd:Shape} $dx = x_i  - x_j$ and $dy = y_i - y_j$ correspond to $x$ and $y$ 
+displacements of part $i$ relative to part $j$. "Each term in the sum can be 
+interpreted as a spring that introduces spatial constraints between a pair of parts,
+where the parameters $(a,b,c,d)$ specify the rest location and rigidity of each spring." \citep{zhu2012face}
+
+
+\section{Preprocessing}
+\label{spec:preproc}
+The problem with using unprocessed Tinder profile pictures is that they are 
+taken at a variety of different angles and scales. Before these pictures can 
+be used to train a classifier they must first be transformed so that they all 
+have the same angle and scale. This was done by using previously detected 
+locations of eyes as reference points so that they always appear in the same 
+location in the image. 
+
+\begin{equation}
+\label{eq:a}
+\alpha = \arccos{\frac{v_{i} \cdot v_{ref}}{|v_{i}| |v_{ref}|}}
+\end{equation}
+
+
+ 
+\section{Feature extraction}
+
+
+\section{Classification}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End: 
