@@ -103,10 +103,39 @@ because being able to estimate the locations of certain landmarks such as eyes
 makes it possible to scale and rotate images so that the landmarks line up.
 
 Another advantage of this particular solution is that it comes with 
-pre-trained on the MultiPIE dataset which needs to be purchased. 
+pre-trained on the MultiPIE dataset which otherwise would need to be purchased. 
 
 \subsection{Face, landmark and pose detection using mixture of trees and HoG}
-...
+In this model, there is a shared pool of facial landmarks encoded as parts and denoted $V$.
+Every viewpoint is modelled as a tree-structured pictorial structure $T_m = (V_m, E_m)$
+where $E_m$ is a set of edges and $V_m \in V$.
+
+The locations of each part ($L = {l_i : i \in V}$) can be scored as follows:
+\begin{flalign}
+    \label{eq:spec:fd:S}
+    S(I,L,m) = \text{App}_m(I,L) + \text{Shape}_m(L) + \alpha^m 
+\end{flalign}
+
+\begin{flalign}
+    \label{eq:spec:fd:App}
+    \text{App}_m(I,L) = \sum_{i \in V_m} w_i^m \cdot \phi(I,l_i) 
+\end{flalign}
+
+\begin{flalign}
+    \label{eq:spec:fd:Shape}
+    \text{Shape}_m(L) = \sum_{ij \in E_m} a_{ij}^m dx^2 + b_{ij}^m dx + c_{ij}^mdy^2 + d_{ij}^m dy 
+\end{flalign}
+
+Equation \ref{eq:spec:fd:App} computes the appearance evidence of part $i$ 
+using template $w_i^m$ which is tuned for mixture/viewpoint $m$. $\phi(I,l_i)$ 
+is the feature vector (e.g. Histogram of oriented gradients) at location $l_i$ 
+of image $I$.
+
+In Equation \ref{eq:spec:fd:Shape} $dx = x_i  - x_j$ and $dy = y_i - y_j$ correspond to $x$ and $y$ 
+displacements of part $i$ relative to part $j$. "Each term in the sum can be 
+interpreted as a spring that introduces spatial constraints between a pair of parts,
+where the parameters $(a,b,c,d)$ specify the rest location and rigidity of each spring." \citep{zhu2012face}
+
 
 \section{Preprocessing}
 \label{spec:preproc}
