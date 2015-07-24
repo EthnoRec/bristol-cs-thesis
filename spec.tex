@@ -148,7 +148,7 @@ The objective of the learning stage is to maximise $S(I,L,m)$ in Equation
 S^*(I) = \max_m[\max_L S(I,L,m)]
 \end{equation}
 
-Equation \ref{eq:spec:fd:maxS} implies that for every mixture/viewpoint we find
+Equation \ref{eq:spec:fd:maxS} says that for every mixture/viewpoint we find
 the best set of part/facial landmark locations $L$ as scored by Equation
 \ref{eq:spec:fd:S} and then choose the mixture with the highest score received.
 Maximisation over $L$ is performed using dynamic programming.
@@ -204,18 +204,27 @@ $\vleftright$ using the definiton of the dot product.
 The original image should be rotated around the midpoint of $\vi{left}$ and $\vi{right}$.
 
 \begin{equation}
-    \vec{t} = \frac{\vi{left} + \vi{right}}{2} - \frac{\vr{left} + \vr{right}}{2}
-\end{equation}
-After rotating the original image as described it will be translated so that 
-the eyes appear in the intended location.
-
-\begin{equation}
+    \label{eq:spec:preproc:mat}
     \begin{bmatrix}
     \alpha & \beta  & (1-\alpha)\cdot \vec{c}_x - \beta \cdot \vec{c}_y + \vec{t}_x \\
     -\beta & \alpha & \beta \cdot \vec{c}_x + (1-\alpha)\cdot \vec{c}_y + \vec{t}_y
     \end{bmatrix}
 \end{equation}
-where $\alpha = s\cos\theta$ and $\beta = s\sin\theta$.
+Using the computed rotation angle and point of rotation we obtain a 
+transformation matrix (\ref{eq:spec:preproc:mat}) to perform this operation
+using affine transform. In this equation $\alpha = s\cos\theta$ and $\beta =
+s\sin\theta$. An additional translation vector ($\vec{t}$) was added to the third
+column in this matrix to move the midpoint of the eyes in the image to the same
+location as the midpoint of the reference eye locations (Equation
+\ref{eq:spec:preproc:midtr}). 
+
+\begin{equation}
+    \label{eq:spec:preproc:midtr}
+    \vec{t} = \frac{\vi{left} + \vi{right}}{2} - \frac{\vr{left} + \vr{right}}{2}
+\end{equation}
+After this transformation the distance between eyes and their locations
+($\vi{left}$ and $\vi{right}$) should match the reference eye locations
+($\vr{left}$ and $\vr{right}$).
 
 \section{Feature extraction}
 
