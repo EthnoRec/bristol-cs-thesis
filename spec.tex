@@ -106,6 +106,7 @@ Another advantage of this particular solution is that it comes with
 pre-trained on the MultiPIE dataset which otherwise would need to be purchased. 
 
 \subsection{Face, landmark and pose detection using mixture of trees and HoG}
+
 In this model, there is a shared pool of facial landmarks encoded as parts and denoted $V$.
 Every viewpoint is modelled as a tree-structured pictorial structure $T_m = (V_m, E_m)$
 where $E_m$ is a set of edges and $V_m \in V$.
@@ -153,10 +154,33 @@ the best set of part/facial landmark locations $L$ as scored by Equation
 \ref{eq:spec:fd:S} and then choose the mixture with the highest score received.
 Maximisation over $L$ is performed using dynamic programming.
 
-\begin{itemize}
-    \item Learning (?)
-    \item Results comparison
-\end{itemize}
+\improvements[inline,caption={}]{
+        Subsections I can expand on:
+        \begin{itemize}
+            \item Learning specifics
+            \item Results/performance comparison with other face detection
+                systems (including Viola-Jones)
+        \end{itemize}
+}
+
+There is a total of 13 viewpoints ranging from $-180^\circ$ to $180^\circ$ in
+$15^\circ$ increments. For frontal face pictures, where the viewpoint is
+between $-45^\circ$ and $45^\circ$, there are 68 landmarks and 39 landmarks for
+other, profile viewpoints. When we detect a face using this algorithm we also
+obtain the set of landmark locations $L$ and an approximate viewpoint.
+
+The majority of pictures collected for this project fall into the frontal
+category and convey more information than profile pictures so only those will
+be used.
+
+Landmark points are placed on faces such that they outline the nose, eyes,
+mouth, jaw and the overall shape of the face.
+
+
+\subsection{Face detection component}
+
+
+
 
 
 \section{Preprocessing}
@@ -201,7 +225,8 @@ $\vleftright$ using the definiton of the dot product.
     \label{eq:spec:preproc:centre}
     \vec{c} = \frac{\vi{left} + \vi{right}}{2}
 \end{equation}
-The original image should be rotated around the midpoint of $\vi{left}$ and $\vi{right}$.
+The original image should be rotated around the midpoint of $\vi{left}$ and
+$\vi{right}$.
 
 \begin{equation}
     \label{eq:spec:preproc:mat}
@@ -210,12 +235,12 @@ The original image should be rotated around the midpoint of $\vi{left}$ and $\vi
     -\beta & \alpha & \beta \cdot \vec{c}_x + (1-\alpha)\cdot \vec{c}_y + \vec{t}_y
     \end{bmatrix}
 \end{equation}
-Using the computed rotation angle and point of rotation we obtain a 
+Using the computed rotation angle and point of rotation we obtain a
 transformation matrix (\ref{eq:spec:preproc:mat}) to perform this operation
 using affine transform. In this equation $\alpha = s\cos\theta$ and $\beta =
-s\sin\theta$. An additional translation vector ($\vec{t}$) was added to the third
-column in this matrix to move the midpoint of the eyes in the image to the same
-location as the midpoint of the reference eye locations (Equation
+s\sin\theta$. An additional translation vector ($\vec{t}$) was added to the
+third column in this matrix to move the midpoint of the eyes in the image to
+the same location as the midpoint of the reference eye locations (Equation
 \ref{eq:spec:preproc:midtr}). 
 
 \begin{equation}
@@ -225,6 +250,8 @@ location as the midpoint of the reference eye locations (Equation
 After this transformation the distance between eyes and their locations
 ($\vi{left}$ and $\vi{right}$) should match the reference eye locations
 ($\vr{left}$ and $\vr{right}$).
+\unsure[inline]{Should I put here step-by-step snapshots of face transformation? For example: original, rotated, scaled, translated.}
+\unsure[inline]{Alternatively, I could do the same with a graph and vectors representing the eyes.}
 
 \section{Feature extraction}
 
