@@ -12,6 +12,7 @@ showtrims%
 
 % packages:
 \XeTeXinputencoding latin1
+\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage[latin1]{inputenx}
 \usepackage[T1]{fontenc}
 \usepackage[english]{babel}
@@ -26,7 +27,6 @@ showtrims%
 \usepackage{booktabs}
 \usepackage{xspace}
 \usepackage{cancel}
-\usepackage{subfig}
 \usepackage[printonlyused,withpage]{acronym}
 \usepackage{rotating}
 \usepackage{cite}
@@ -34,6 +34,19 @@ showtrims%
 \usepackage[htt]{hyphenat}
 \usepackage{hyperref}
 \usepackage{fontspec}
+\usepackage{wrapfig}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% notes
+\usepackage{xargs}                      
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\improvements}[2][1=]{\todo[noprepend,linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{ \begin{minipage}{\textwidth-12pt}#2\end{minipage}  }}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
 
 % pdf
 \hypersetup{bookmarks, colorlinks, breaklinks, pdftitle={Ethnogeographic 
@@ -264,6 +277,7 @@ showtrims%
 \include{background}
 \include{spec}
 \include{impl}
+\include{results}
 %\include{host}
 %\include{web}
 %\include{correlation}
