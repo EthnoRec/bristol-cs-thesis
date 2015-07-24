@@ -34,32 +34,35 @@ in the PostgreSQL database.
 
 \begin{table}[t]
     \begin{center}
-        \begin{tabular}{| c | c | c |}
-            \hline
-            Attribute       & Data type              & Other \\ \hline
-            \multicolumn{3}{|c|}{Person (People)} \\ \hline
-            \_id           & character(24)            & not null   \\ \hline
-            distance\_mi   & integer                  &            \\ \hline
-            name          & character varying(255)   &            \\ \hline
-            gender        & integer                  &            \\ \hline
-            date\_of\_birth & integer                  &            \\ \hline
-            origin\_lat    & double precision         &            \\ \hline
-            origin\_long   & double precision         &            \\ \hline
+        \begin{tabular}{ c  c  c }
+            \toprule
+            Attribute       & Data type              & Other \\ \toprule
+            \multicolumn{3}{c}{Person (People)} \\ \midrule
+            \_id           & character(24)            & not null   \\ 
+            distance\_mi   & integer                  &            \\ 
+            name          & character varying(255)   &            \\ 
+            gender        & integer                  &            \\ 
+            date\_of\_birth & integer                  &            \\ 
+            origin\_lat    & double precision         &            \\ 
+            origin\_long   & double precision         &            \\ 
 
-            \multicolumn{3}{|c|}{Image (Images)} \\ \hline
-            \_id              & character(36)            & not null   \\ \hline
-            ext              & character varying(4)     &            \\ \hline
-            url              & character varying(255)   &            \\ \hline
-            person\_id        & character(24)            &            \\ \hline
-            detection\_job\_id & integer                  &            \\ \hline
+            \midrule
+            \multicolumn{3}{c}{Image (Images)} \\ \midrule
+            \_id              & character(36)            & not null   \\ 
+            ext              & character varying(4)     &            \\ 
+            url              & character varying(255)   &            \\ 
+            person\_id        & character(24)            &            \\ 
+            detection\_job\_id & integer                  &            \\ 
 
-            \multicolumn{3}{|c|}{Detection Job (DetectionJobs)} \\ \hline
-            \_id      & integer                     & not null, auto-increment \\ \hline
-            status    & enum{started, finished}      &         \\ \hline
+            \midrule
+            \multicolumn{3}{c}{Detection Job (DetectionJobs)} \\ \midrule
+            \_id      & integer                     & not null, auto-increment \\ 
+            status    & enum{started, finished}      &         \\ 
 
-            \multicolumn{3}{|c|}{Common among all tables} \\ \hline
-            createdAt & timestamp with time zone     & not null  \\ \hline
-            updatedAt & timestamp with time zone     & not null  \\ \hline
+            \midrule
+            \multicolumn{3}{c}{Common among all tables} \\ \midrule
+            createdAt & timestamp with time zone     & not null  \\ 
+            updatedAt & timestamp with time zone     & not null  \\  \bottomrule
         \end{tabular}
     \end{center}
     \caption{Attribute data types of entities introduced in Figure 
