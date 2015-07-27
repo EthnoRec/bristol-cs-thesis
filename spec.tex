@@ -35,9 +35,9 @@ A user profile was created specifically for this project using the original
 Tinder mobile application on an Android phone. 
 
 \subsection{Profile metadata and photo collection}
-A web application (\texttt{tinder-gather}) was written to mimic the Tinder app whose only purpose was 
-to record profile metadata such as name, location and date birth as well as 
-to save user-uploaded pictures. 
+A web application (\texttt{tinder-gather}) was written to mimic the Tinder app
+whose only purpose was to record profile metadata such as name, location and
+date birth as well as to save user-uploaded pictures. 
 
 This web application provides an API that allows an external tool 
 (\ref{spec:data:jobs}) to easily change the location of the user for this 
@@ -70,6 +70,11 @@ just a city name whose location is hard-coded inside the script and can be
 easily extended. This argument is required. Limit refers to the maximum number 
 of profiles to fetch from Tinder at once and delay specifies how frequently 
 they will be fetched.
+
+When a job is created and the data collection service is notified it starts
+collecting user profile metadata and their pictures. The profile metadata is
+saved into a database along with the filenames of images that are stored on
+disk in a single directory.
 
 This tool is also used to manage face and landmark detection jobs which will 
 be described in detail in Section \ref{spec:fd}. 
@@ -174,11 +179,65 @@ category and convey more information than profile pictures so only those will
 be used.
 
 Landmark points are placed on faces such that they outline the nose, eyes,
-mouth, jaw and the overall shape of the face.
+mouth, jaw and the overall shape of the face. The particular groups of landmark
+locations are specified in Table \ref{table:spec:fd:landmarks}.
 
+\begin{wraptable}{r}{5.5cm}
+    \begin{tabular}{cc}\\\toprule  
+        Face part & Landmark range \\\midrule
+        Nose      & 1-9 \\  \midrule
+        Left eye  & 10-15 \\  \midrule
+        Right eye & 21-26\\  \midrule
+        Mouth     & 32-51 \\  \bottomrule
+    \end{tabular}
+    \caption{A wrapped table going nicely inside the text.}
+    \label{table:spec:fd:landmarks}
+\end{wraptable} 
+
+To summarise, when this algorithm detects a face in a picture it outputs the 
+locations of important landmarks, face angle to the nearest $15^\circ$
+increment and score to say how accurate the detection is.
 
 \subsection{Face detection component}
+This face detection algorithm functions as a separate component which is
+comprised of a face detection job manager and a single executable which
+performs face detection using this algorithm.
 
+The executable takes a list of image filenames as standard input and loads a
+configuration file which contains the name of the directory where all images
+are saved during data collection. After ensuring that all the images exist on
+disk it starts performing face detection on each image one-by-one and saving
+the output of the algorithm - the locations of landmarks, face angle and score,
+to a database.
+
+Creating a list of image filenames to process was cumbersome so the Tinder job
+manager tool introduced in \ref{spec:data:jobs} was extended to support
+creating such lists. 
+
+Usage information for this job action can be displayed by running the following
+command:
+\begin{logs}
+./jobs.js djob post
+\end{logs}
+
+In order to create a list of images to process the user must specify the
+location of Tinder profiles whose images will be retrieved, gender and the
+number of images to put in the list. If ran successfully, this will schedule
+the images retrieved according to the specified filters to be processed as a
+detection job whose numeric ID will be given as the output.
+
+Compared to remarkably impressive speed performance of Viola-Jones, this
+particular algorithm can take on average around 7 seconds to process a single
+picture. This led to the face detection component being designed to run as
+several, lock-free, concurrent instances with each having its own job ID so
+that it can run on multiple machines at the same time.
+
+A tool located in the \texttt{detect-worker} repository under the name
+\texttt{prepare-detect-worker} was written to create \texttt{tar} archives
+which contain the necessary image files needed for a particular detection job.
+The tool takes a detection job ID as the only argument and creates an archive
+with filename \texttt{job-<ID>.tar} which should be uploaded to the machine
+that will be used to run this face detection job.
 
 
 
