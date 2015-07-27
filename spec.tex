@@ -229,8 +229,8 @@ detection job whose numeric ID will be given as the output.
 Compared to remarkably impressive speed performance of Viola-Jones, this
 particular algorithm can take on average around 7 seconds to process a single
 picture. This led to the face detection component being designed to run as
-several, lock-free, concurrent instances with each having its own job ID so
-that it can run on multiple machines at the same time.
+lock-free, concurrent instances with each having its own job ID so that it can
+run on multiple machines at the same time.
 
 A tool located in the \texttt{detect-worker} repository under the name
 \texttt{prepare-detect-worker} was written to create \texttt{tar} archives
@@ -239,8 +239,12 @@ The tool takes a detection job ID as the only argument and creates an archive
 with filename \texttt{job-<ID>.tar} which should be uploaded to the machine
 that will be used to run this face detection job.
 
-
-
+On the target machine the user must run \texttt{prepare-job} in the same
+directory as the \texttt{job-<ID>.tar} archive and the face detector
+executable. The face detection executable loads a configuration file which
+contains the hostname and credentials for the remote database server used by
+the data collection service. This is needed because the face detector will save
+detection results to that remote server.
 
 \section{Preprocessing}
 \label{spec:preproc}
