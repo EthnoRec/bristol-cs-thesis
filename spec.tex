@@ -1,5 +1,62 @@
 \chapter{Specification and system design}
 \label{spec}
+The final system consists of three main stages: data collection, face detection
+and classification, which also includes pre-processing and feature-selection.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[width=\textwidth]{figures/spec/diagram_collection}
+\end{center}
+\caption{Structure of the data collection part of the system.}
+\label{fig:spec:diagram_collection}
+\end{figure}
+
+In data collection there is one main component whose aim is to collect location
+data and pictures of users on a mobile dating service called Tinder. User
+profile metadata is saved in a relational database while images are saved to
+disk. This component provides an interface to control how the data is collected
+and from which locations. This interface is used by a command line utility
+called Data Collection Job Manager (DCJM) which makes it easy to control the data
+collection process.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[width=\textwidth]{figures/spec/diagram_detection}
+\end{center}
+\caption{Structure and interaction of face detection components. The actual
+face detection algorithm runs in the cluster on individual nodes. The database
+in this diagram is the same as in Figure \ref{fig:spec:diagram_collection}.}
+\label{fig:diagram_detection}
+\end{figure}
+
+The main component of the face detection stage is a C++ implementation of a
+novel face detection algorithm which outperforms common algorithms in the area
+such as Viola-Jones and mostly matches the accuracy of the best commercial face
+detection systems such as those used by Google Picasa and face.com. The output
+of this component includes a rough viewpoint estimation, locations of landmarks
+and a score that tells us about the quality of the detection. This data is
+saved to the same database as the data collection service.
+
+Despite impressive accuracies achieved in benchmarks using MultiPIE and
+Annotated Faces in the Wild (AFW), it has one significant downside. The time
+taken to detect one or more faces in a picture averaged at around 7 seconds,
+which was a serious obstacle since thousands of pictures needed to be analysed
+for faces.
+
+In order to mitigate this factor a set of tools was implemented so that the
+process of detecting faces in thousands of pictures becomes as modular as
+possible. As a result, a concept of detection jobs was introduced so that images
+could be processed in parallel on several machines.
+
+Face Detection Job Manager (FDJM) is a tool which is similar to
+DCJM\footnote{Data Collection Job Manager} and provides a command line
+interface to select images to go through the face detector. The output of this
+tool upon a successful creation of a detection job is a numeric ID of the job.
+This ID can then be provided to the Face Detection Worker Prepare tool which
+creates an archive with the required files to be processed by the face detector
+component on a dedicated remote machine.
+
+
 \section{Data collection}
 The quantity and the quality of training data is crucial to all computer vision 
 projects. However, for this task there was no luxury of using an existing 
@@ -50,7 +107,7 @@ Once the extension is installed a button to launch the app will appear in the
 toolbar. As soon as the user signs in the app will be ready to accept data 
 collection jobs from the Tinder job manager tool (\ref{spec:data:jobs}).
 
-\subsection{Tinder job manager}
+\subsection{Data collection and detection job manager}
 \label{spec:data:jobs}
 Images of people need to be collected from a number of different locations 
 around the world. Specifying the coordinates of each location using latitude 
@@ -207,7 +264,7 @@ The executable takes a list of image filenames as standard input and loads a
 configuration file which contains the name of the directory where all images
 are saved during data collection. After ensuring that all the images exist on
 disk it starts performing face detection on each image one-by-one and saving
-the output of the algorithm - the locations of landmarks, face angle and score,
+the output of the algorithm: the locations of landmarks, face angle and score,
 to a database.
 
 Creating a list of image filenames to process was cumbersome so the Tinder job
@@ -246,7 +303,10 @@ contains the hostname and credentials for the remote database server used by
 the data collection service. This is needed because the face detector will save
 detection results to that remote server.
 
-\section{Preprocessing}
+\section{Data analysis and classification component}
+
+
+\subsection{Preprocessing}
 \label{spec:preproc}
 \newcommand{\vleftright}{\vec{v}_i^{\text{left} \rightarrow \text{right}}}
 \newcommand{\vi}[1]{\vec{v}_i^{\text{#1}}}
@@ -313,13 +373,16 @@ the same location as the midpoint of the reference eye locations (Equation
 After this transformation the distance between eyes and their locations
 ($\vi{left}$ and $\vi{right}$) should match the reference eye locations
 ($\vr{left}$ and $\vr{right}$).
-\unsure[inline]{Should I put here step-by-step snapshots of face transformation? For example: original, rotated, scaled, translated.}
-\unsure[inline]{Alternatively, I could do the same with a graph and vectors representing the eyes.}
+\unsure[inline]{Should I put here step-by-step snapshots of face
+transformation? For example: original, rotated, scaled, translated.}
+\unsure[inline]{Alternatively, I could do the same with a graph and vectors
+representing the eyes.}
 
-\section{Feature extraction}
+
+\subsection{Feature extraction}
 
 
-\section{Classification}
+\subsection{Classification}
 
 %%% Local Variables: 
 %%% mode: latex
