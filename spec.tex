@@ -26,7 +26,7 @@ collection process.
 \caption{Structure and interaction of face detection components. The actual
 face detection algorithm runs in the cluster on individual nodes. The database
 in this diagram is the same as in Figure \ref{fig:spec:diagram_collection}.}
-\label{fig:diagram_detection}
+\label{fig:spec:diagram_detection}
 \end{figure}
 
 The main component of the face detection stage is a C++ implementation of a
@@ -55,6 +55,26 @@ tool upon a successful creation of a detection job is a numeric ID of the job.
 This ID can then be provided to the Face Detection Worker Prepare tool which
 creates an archive with the required files to be processed by the face detector
 component on a dedicated remote machine.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[width=\textwidth]{figures/spec/diagram_classification_cvtrain}
+\end{center}
+\caption{Part of the classification stage which is used to perform
+cross-validation to find the best features, classifier and classifier
+parameters. The database in this diagram is the same as in Figures
+\ref{fig:spec:diagram_collection} and \ref{fig:spec:diagram_detection}.}
+\label{fig:spec:diagram_cvtrain}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[width=\textwidth]{figures/spec/diagram_classification_classify}
+\end{center}
+\caption{The same component can also be used to estimate the person's location
+from a picture of their face.}
+\label{fig:spec:diagram_classify}
+\end{figure}
 
 
 \section{Data collection}
