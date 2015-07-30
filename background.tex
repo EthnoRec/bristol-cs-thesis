@@ -40,11 +40,11 @@ to the target pixel value is found for every neighbour and then these ratios
 are summed. Arctangent of the sum is then taken in order to avoid drastic
 variation in the excitation values.  Orientation is simply the gradient angle
 at the target pixel that is quantised to a dominant orientation. The number of
-dominant orientations T is selected manually. In the paper that proposed this
+dominant orientations $T$ is selected manually. In the paper that proposed this
 descriptor the value of 8 was used.  The excitation values are then grouped by
 the dominant orientation and evenly split into $M$ bins, giving us a histogram
 depicting the spread of excitation values for each orientation. Next, these $T$
-histograms are further split into M different histograms each, resulting in $T \times M$
+histograms are further split into $M$ different histograms each, resulting in $T \times M$
 histograms. These histograms are then grouped by the excitation bin and
 sequentially concatenated to form a single histogram.  
 
