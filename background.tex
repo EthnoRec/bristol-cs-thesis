@@ -1,6 +1,75 @@
 \chapter{Background and literature review}
 \label{background}
-Background placeholder.
+There are many existing methods that have achieved extremely high accuracies
+($95\%$ to $100\%$ \citep{muhammadg}) when classifying major races, such as
+Caucasian and Asian, however the aim of this project is to go further and be
+able to estimate potential country of birth. This is a far more challenging
+task as different ethnic groups within the same race have significantly more
+common facial features and visual similarities than ethnic groups from
+different races.
+
+\section{Literature review}
+Most successful attempts at race qualification with 2 to 5 classes have relied
+on local descriptor methods with the most common method being Local Binary
+Patterns (LBP) (\citep{muhammadg}, \citep{yangLBP}, \citep{zhang2D3D}). Another
+local descriptor method called Weber Local Descriptor (WLD) showed slightly
+lower but comparable performance in a paper by \citep{muhammadg} and an
+increase in accuracy through feature fusion by combining the histograms of LBP
+and WLD.  
+
+\subsection{Local Binary Patterns}
+
+The LBP operator works by selecting a pixel and using its value to threshold
+neighbouring pixels that lie on a circle with that pixel as the centre. In most
+implementations the neighbours can simply be 8 outside pixels of a $9 \times 9$ pixel
+box with the target pixel in the centre.  The thresholded values are read
+clockwise from 12 o’clock and form a binary number that is regarded as the LBP
+value of that pixel. LBP values are calculated for all pixels in some image to
+generate a histogram.  Usually, these histograms are generated in parallel by
+performing on 16x16 pixel cells and then combining the histograms. These
+histograms can then be used as features in classifiers.  
+
+
+\subsection{Weber’s Law Descriptor}
+This descriptor proposed by \citep{chenj} is based on a famous law in
+psychology which states that the ratio of a change in stimulus to the original
+stimulus is constant.  In WLD two metrics are computed for each pixel -
+differential excitation and orientation.  To calculate the excitation the ratio
+of the difference between a neighbouring pixel value and the target pixel value
+to the target pixel value is found for every neighbour and then these ratios
+are summed. Arctangent of the sum is then taken in order to avoid drastic
+variation in the excitation values.  Orientation is simply the gradient angle
+at the target pixel that is quantised to a dominant orientation. The number of
+dominant orientations T is selected manually. In the paper that proposed this
+descriptor the value of 8 was used.  The excitation values are then grouped by
+the dominant orientation and evenly split into $M$ bins, giving us a histogram
+depicting the spread of excitation values for each orientation. Next, these $T$
+histograms are further split into M different histograms each, resulting in $T \times M$
+histograms. These histograms are then grouped by the excitation bin and
+sequentially concatenated to form a single histogram.  
+
+
+\subsection{Holistic methods}
+A Principal Component Analysis (PCA) approach to feature extraction was tested
+on the same dataset as the fusion of previously mentioned LBP and WLD
+histograms and resulted in average accuracy of $78.5\%$ from 5 classes with $96.83\%$
+being the lowest class accuracy achieved. The LBP+WLD feature fusion led to
+$99.06\%$ accuracy with $96.83\%$ lowest class accuracy.  
+
+A more common holistic feature extraction method for this task is Linear
+Discriminant Analysis (LDA) which is often used in combination with PCA to
+reduce the dimension of the original pixel value vector for some image to $N-c$
+where N is the number of training set instances and c is the number of classes.
+This is required because LDA involves finding the inverse of within-class
+scatter matrix which becomes singular (and thus not invertible) if the number
+of training samples exceeds $N-c$.
+
+%LDA calculations rely on finding the inverse of within-class scatter matrix
+%which is a sum of matrices of rank 1 since every feature vector is centered
+%around its own class mean and multiplied by the transpose of this centred
+%feature vector. If the number of features exceeds the number of training
+%instances then (?)
+
 
 %%% Local Variables: 
 %%% mode: latex

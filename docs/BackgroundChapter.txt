@@ -1,0 +1,187 @@
+﻿The State of Art of Ethnicity Recognition
+There are many existing methods that have achieved extremely high accuracies
+(95% to 100% [1]) when classifying major races, such as Caucasian and Asian,
+however the aim of this project is to go further and be able to estimate
+potential country of birth. This is a far more challenging task as different
+ethnic groups within the same race have significantly more common facial
+features and visual similarities than ethnic groups from different races.
+
+
+Literature Review
+Most successful attempts at race qualification with 2 to 5 classes have relied
+on local descriptor methods with the most common method being Local Binary
+Patterns (LBP) (G. Muhammad et al [1], Y. Zhiguang et al [2], G Zhang et al
+[3]). Another local descriptor method called Weber Local Descriptor (WLD)
+showed slightly lower but comparable performance in a paper by G. Muhammad et
+al [1] and an increase in accuracy through feature fusion by combining the
+histograms of LBP and WLD.  Local Binary Patterns The LBP operator works by
+selecting a pixel and using its value to threshold neighbouring pixels that lie
+on a circle with that pixel as the centre. In most implementations the
+neighbours can simply be 8 outside pixels of a 9x9 pixel box with the target
+pixel in the centre.  The thresholded values are read clockwise from 12 o’clock
+and form a binary number that is regarded as the LBP value of that pixel. LBP
+values are calculated for all pixels in some image to generate a histogram.
+Usually, these histograms are generated in parallel by performing on 16x16
+pixel cells and then combining the histograms. These histograms can then be
+used as features in classifiers.  Weber’s Law Descriptor This descriptor
+proposed by G. Chen et al [4] is based on a famous law in psychology which
+states that the ratio of a change in stimulus to the original stimulus is
+constant.  In WLD two metrics are computed for each pixel - differential
+excitation and orientation.  To calculate the excitation the ratio of the
+difference between a neighbouring pixel value and the target pixel value to the
+target pixel value is found for every neighbour and then these ratios are
+summed. Arctangent of the sum is then taken in order to avoid drastic variation
+in the excitation values.  Orientation is simply the gradient angle at the
+target pixel that is quantised to a dominant orientation. The number of
+dominant orientations T is selected manually. In the paper that proposed this
+descriptor the value of 8 was used.  The excitation values are then grouped by
+the dominant orientation and evenly split into M bins, giving us a histogram
+depicting the spread of excitation values for each orientation. Next, these T
+histograms are further split into M different histograms each, resulting in TxM
+histograms. These histograms are then grouped by the excitation bin and
+sequentially concatenated to form a single histogram.  Holistic Methods A
+Principal Component Analysis (PCA) approach to feature extraction was tested on
+the same dataset as the fusion of previously mentioned LBP and WLD histograms
+and resulted in average accuracy of 78.5% from 5 classes with 96.83% being the
+lowest class accuracy achieved. The LBP+WLD feature fusion led to 99.06%
+accuracy with 96.83% lowest class accuracy.  A more common holistic feature
+extraction method is Linear Discriminant Analysis (LDA) which is often used in
+combination with PCA to reduce the dimension of the original pixel value vector
+for some image to N-c where N is the number of training set instances and c is
+the number of classes.
+
+
+LDA calculations rely on finding the inverse of within-class scatter matrix
+which is a sum of matrices of rank 1 since every feature vector is centered
+around its own class mean and multiplied by the transpose of this centred
+feature vector. If the number of features exceeds the number of training
+instances then 
+ 
+LDA (79.05% average from 3 classes, 77.14% lowest) Ensemble LDA (96.3% average
+from 2 classes (Asian vs non-Asian, 96% lowest in Asian)
+
+
+Problem Statement The majority of currently published approaches to both race
+and more refined ethnicity recognition exclusively uses face pictures taken in
+perfect lighting conditions and in the same orientation. This makes the
+training process significantly easier, however collecting all this data is very
+costly. This issue could be mitigated and give us access to millions of new
+training instances if we were able to take advantage of numerous pictures of
+people posted social networks along with their location.
+
+
+It is expected that majority of pictures selected to be used as training data
+will contain heads and faces in countless possible orientations, making it
+incredibly difficult to come up with a representation that would be the same
+for all instances of the training set.
+
+
+Potential Solutions Passport-style Photo Reconstruction Regions where faces are
+detected could be scaled, rotated and most importantly deskewed to predict what
+a passport-style photo of each face could look like. This could be done after
+estimating the orientation of the head in three dimensions. Of course, in most
+cases complete reconstruction would not be possible, however certain
+symmetrical areas of the face could be mirrored to fill in missing parts of the
+face that were not captured in the original photo.  Average 3D Head Model
+Generation Another potential approach involves estimating roll, pitch and yaw
+of the human head just like the previous method and projecting the detected
+part of the face or head onto a 3D model of the human head. This approach would
+allow us to classify non-frontal face pictures more effectively as occasional
+profile pictures would not just be discarded as by the passport-style method
+but actually make the classifier more flexible by getting it to work with
+pictures of heads in a wider range of orientations.
+
+
+Technical Issues Collecting Data from Social Networks Collecting the pictures
+to be used for this task will require some level of human involvement and
+familiarity with various social networks popular around the world. Several web
+crawlers are to be used on a number of social networks to automatically
+download pictures of people from a particular location. 
+
+
+Facebook and Tinder (mobile dating app) can be effectively used to collect
+pictures of people from the Americas and Western Europe, however certain areas
+where they are not as popular will require using local social networks such as
+Vkontakte and Odnoklassniki in post-Soviet states. 
+
+
+The main challenge of this task is to ensure that people who reside in that
+country or have it set as their country of origin are true representatives of
+people from that location. If this is found to have significant impact on the
+accuracy of classification a special filtering step can be introduced to
+discard profiles who have names that are foreign to that country. Of course,
+this will absolutely have to be tuned by hand for every country as it can
+potentially reject entire ethnic groups of a country.  Preprocessing
+Preprocessing is by far one of the most difficult and important parts of this
+project as it is incredibly challenging to extract relevant features from
+pictures of heads taken in different orientations and lighting conditions.
+
+
+It is very likely that the majority of pictures will not look anywhere close to
+passport-style frontal portraits since they are collected from social networks.
+The first form of preprocessing would be colour balance manipulation to
+minimise the impact of differences from using a variety of cameras. 
+
+
+Many pictures would have been manipulated by the uploader to the point where
+they cannot be restored, which means certain vital information such as skin
+colour and location of some facial features would be completely unrecoverable.
+This is often a result of applying photo filters such as heat map, sepia,
+greyscale, thresholding, vectorisation, hue change and many others. At this
+stage these filters need to be detected and cause the images to be discarded as
+unsuitable for use. If even a small number of such images slipped into the
+training set they would immediately form their own clusters and create
+anomalies in the classifier.
+
+
+So far the proposed preprocessing techniques have been completely ignorant of
+the actual contents of the images. The next step would be to eliminate all
+images that do not contain faces using existing face detection tools. It is
+expected that many users would upload images in masks, of pets and inanimate
+objects such as cars, landmarks and many others. The aim of this preprocessing
+stage is to eliminate obviously useless instances automatically without human
+intervention.
+
+
+The most complicated preprocessing stage that would constitute a major part of
+the entire project is creating some form of representation of each instance of
+a detected human face or head. This representation must account for an array of
+factors that can wrongly lead the classifier to consider two similar faces as
+completely different. These factors include the roll, pitch and yaw of the
+human head, emotion, minor obstructions, facial hair and many others. Depending
+on the approach chosen, the images will need to be scaled, rotated, deskewed
+and possibly even projected onto a learned 3D model of the human head for that
+particular ethnogeographic group.  Classification Once the preprocessed data
+becomes available and features are learned, the classifier of choice will
+almost definitely encounter issues in certain locations with great mixed-race
+and diverse ethnic group populations such as the United States and India
+compared to more ethnically homogeneous countries such as Japan. In this case,
+simply generating a single average face and using it to classify new data is
+guaranteed to give poor results. In order to avoid this the training algorithm
+needs to be able to learn visually similar clusters within each country
+considered. This process will be unsupervised as defining major ethnic group
+for each country would severely hinder flexibility of the system and require
+significant resources for labelling. The perfect unsupervised clustering
+algorithm for this would detect a reasonable number of ethnic groups within the
+country being analysed and optionally provide average faces for each to be
+labelled by humans.  ________________
+
+
+[1] G. Muhammad, M. Hussain, F. Alenezy, G. Bebis, A. M. Mirza, and H.
+Aboalsamh, Race classification from face images using local descriptors.
+International Journal on Artificial Intelligence Tools, 21(05), 2012
+
+
+[2] Y. Zhiguang and A. Haizhou, Demographic classification with local binary
+patterns, in Proc.  International Conf. on Biometrics (ICB), (2007), pp.
+464–473.
+
+
+[3] G. Zhang  and  Y.  Wang,  Multimodal  2D  and  3D  facial  ethnicity
+classification,  in Fifth International Conference on Image and Graphics, 2009
+(ICIG’09), (2009), pp. 928–932.
+
+
+[4] J. Chen, S. Shan, G. Zhao, X. Chen, W. Gao, M. Pietikainen, A robust
+descriptor based on Weber’s Law, Computer Vision and Pattern Recognition, 2008.
+CVPR 2008. IEEE Conference on , vol., no., pp.1,7, 23-28 June 2008
