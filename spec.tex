@@ -76,6 +76,29 @@ from a picture of their face.}
 \label{fig:spec:diagram_classify}
 \end{figure}
 
+Finally, the last stage incorporates several components responsible for
+training a classifier that can estimate a person's location from a picture of
+their face using the collected images and face detection results from previous
+stages.
+
+Pictures collected on Tinder were taken at a variety of angles and scales,
+making it hard to detect patterns when looking at the data as a whole. In order
+to eliminate these factors from the dataset all images are rotated, scaled and
+aligned so that the eyes always appear in the same location in the image. This
+is a simple task as the face detector results include the locations of both
+eyes. Since we have the actual eye positions and the target eye positions it is
+possible to calculate the angle, scale and translation factors needed to build
+a transformation matrix and apply affine transform. The transformation is the
+output of the Pre-processing step (Figure \ref{fig:spec:diagam_classify}). 
+
+Next, features are extracted using local binary patterns and used in
+combination with user location data obtained in the data collection stage to
+train a support vector machine.
+
+The \texttt{classification} tool provides options to train a single model to be
+used when classifying novel images and to perform cross-validation according to
+a configuration file with various parameters.
+
 
 \section{Data collection}
 The quantity and the quality of training data is crucial to all computer vision 
