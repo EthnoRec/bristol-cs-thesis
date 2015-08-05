@@ -214,9 +214,45 @@ which is specified as part of a data collection job (see \ref{spec:data:jobs}).
 
 \section{Face and landmark detection}
 \label{impl:fd}
-\improvements[inline,caption={}]{Open source C++ implementation by eHarmony
-modified to interact with other components. One Node.js and a few Bash scripts
-to manage face detection jobs.}
+The original face detection algorithm introduced by \citep{zhu2012face} was
+implemented in Matlab and was deemed unsuitable to be incorporated into this
+project as it would have been difficult to integrate it with other parts of the
+system. Luckily, there was an existing implementation of the same algorithm in
+C++ by eHarmony \citep{eHphotofeature}. This implementation produced a single
+executable which takes a trained model in XML format and a single image as
+arguments and labels various landmarks and a bounding box for the face. 
+
+It was modified to read a list of new line character-separated list of image
+filenames as standard input so that it could process them in bulk. Instead of
+labelling landmarks on the original images it was modified to save detection
+results to the central database (PostgreSQL). The database server, credentials
+and directory containing the given images are specified in a YAML configuration
+file which is passed as the only argument to the modified executable.
+
+\subsection{Face detection job prepare tool}
+The \texttt{prepare-detect-worker} script is used to generate the list of image
+filenames to process and package the images in a single archive so that face
+detection could be done on a remote server.
+
+Generating the list of image filenames to process is done using a Node.js
+script executed from inside \texttt{prepare-detect-worker}. It connects to the
+central database and fetches image filenames from the \texttt{Images} table
+where field \texttt{detection\_job\_id} is the same as the detection job ID
+provided as an argument to \texttt{prepare-detect-worker}.
+
+The script then checks if the images actually exist on disk and if not it
+downloads the missing images. This is done because the data collection service
+may sometimes fail to download an image or it could be invalid. If the image
+still cannot be downloaded or contains an error it will be excluded from the
+list.
+
+Once the list is generated it is used to create a tar archive using the
+standard \texttt{tar} UNIX utility. The filename of the archive would be
+\texttt{job-<detection\_job\_id>.tar}.
+
+On the remote face detection server, the \texttt{bulk-detector} script is used
+to split the list of images into smaller lists that can be passed to the face
+detector executable.
 
 \section{Data analysis and classification}
 \improvements[inline,caption={}]{Python script using numpy/scipy+OpenCV

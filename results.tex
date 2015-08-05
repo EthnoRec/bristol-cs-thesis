@@ -122,24 +122,27 @@ extraction method (LBP) and classifier (SVM).}
         Mexico(actual)             &0.44&0.15&0.41\\ 
         \addlinespace
       \end{tabular}
-      \caption{PCA(d=N-c)+LDA: Male groups}
+      \caption{PCA(d=N-c)+LDA and kNN(k=5): Male groups}
       \label{table:results:ff_male_groups}
-    \end{table}
+\end{table}
 
-    \begin{table}[b]
-      \centering
-      \begin{tabular}{l c c c}
-        \toprule
-        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
-        \midrule
-        India(actual)              & 0.67                     & 0.15                       & 0.18 \\
-        Brazil(actual)             & 0.18                     & 0.59                       & 0.23   \\
-        Mexico(actual)             & 0.2                      & 0.28                       & 0.52 \\
-        \addlinespace
-      \end{tabular}
-      \caption{PCA(d=N-c)+LDA: Female groups}
-      \label{table:results:ff_female_groups}
-    \end{table}
+\begin{table}[b]
+  \centering
+  \begin{tabular}{l c c c}
+    \toprule
+    &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
+    \midrule
+    India(actual)              &0.48&0.33&0.2 \\  
+    Brazil(actual)             &0.46&0.36&0.18 \\ 
+    Mexico(actual)             &0.4&0.28&0.32 \\  
+    \addlinespace
+  \end{tabular}
+  \caption{PCA(d=N-c)+LDA and kNN(k=5): Female groups}
+  \label{table:results:ff_female_groups}
+\end{table}
+Tables \ref{table:results:ff_male_groups} and
+\ref{table:results:ff_female_groups} are confusion matrices produced using the
+same feature extraction method and classifier setup as \citep{chinesegroups}.
 
 
 %%% Local Variables: 
