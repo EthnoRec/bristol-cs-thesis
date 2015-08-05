@@ -18,7 +18,7 @@ increase in accuracy through feature fusion by combining the histograms of LBP
 and WLD.  
 
 \subsection{Local Binary Patterns}
-
+\label{bg:lbp}
 The LBP operator works by selecting a pixel and using its value to threshold
 neighbouring pixels that lie on a circle with that pixel as the centre. In most
 implementations the neighbours can simply be 8 outside pixels of a $9 \times 9$ pixel
@@ -69,6 +69,10 @@ of training samples exceeds $N-c$.
 %around its own class mean and multiplied by the transpose of this centred
 %feature vector. If the number of features exceeds the number of training
 %instances then (?)
+
+\improvements[inline,caption={}]{Review of \citep{chinesegroups} - recognition
+of different Chinese ethnic groups (the most relevant paper to the aim of this
+project).}
 
 
 %%% Local Variables: 

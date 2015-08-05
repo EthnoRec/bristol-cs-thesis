@@ -212,13 +212,21 @@ The request above is performed every \texttt{<delay>} seconds, the value for
 which is specified as part of a data collection job (see \ref{spec:data:jobs}).
 
 
-
 \section{Face and landmark detection}
 \label{impl:fd}
+\improvements[inline,caption={}]{Open source C++ implementation by eHarmony
+modified to interact with other components. One Node.js and a few Bash scripts
+to manage face detection jobs.}
 
-\section{Feature extraction}
+\section{Data analysis and classification}
+\improvements[inline,caption={}]{Python script using numpy/scipy+OpenCV
+bindings for pre-processing and numpy/scipy+scikit-learn for feature extraction
+and classification.}
+\subsection{Pre-processing}
 
-\section{Classification}
+\subsection{Feature extraction}
+
+\subsection{Classification}
 
 %%% Local Variables: 
 %%% mode: latex

@@ -89,7 +89,7 @@ is a simple task as the face detector results include the locations of both
 eyes. Since we have the actual eye positions and the target eye positions it is
 possible to calculate the angle, scale and translation factors needed to build
 a transformation matrix and apply affine transform. The transformation is the
-output of the Pre-processing step (Figure \ref{fig:spec:diagam_classify}). 
+output of the Pre-processing step (Figure \ref{fig:spec:diagram_classify}). 
 
 Next, features are extracted using local binary patterns and used in
 combination with user location data obtained in the data collection stage to
@@ -203,7 +203,7 @@ the face detection task.
 
 The model can also be trained to learn landmark localisation and face angle, 
 which provide additional information that enables us to further filter and 
-preprocess the images collected from Tinder profiles. This is important 
+pre-process the images collected from Tinder profiles. This is important 
 because being able to estimate the locations of certain landmarks such as eyes 
 makes it possible to scale and rotate images so that the landmarks line up.
 
@@ -346,10 +346,17 @@ contains the hostname and credentials for the remote database server used by
 the data collection service. This is needed because the face detector will save
 detection results to that remote server.
 
-\section{Data analysis and classification component}
+\section{Data analysis and classification}
+\improvements[inline,caption={}]{Everything mentioned here is actually
+implemented in a single script. I can talk about how these components interact
+inside it.}
+
+\unsure[inline]{I have tried many pre-processing techniques, feature extraction
+methods and classifiers. Should I only mention my final choices or not mention
+the particular algorithms I have used at all?}
 
 
-\subsection{Preprocessing}
+\subsection{Pre-processing}
 \label{spec:preproc}
 \newcommand{\vleftright}{\vec{v}_i^{\text{left} \rightarrow \text{right}}}
 \newcommand{\vi}[1]{\vec{v}_i^{\text{#1}}}
@@ -421,11 +428,19 @@ transformation? For example: original, rotated, scaled, translated.}
 \unsure[inline]{Alternatively, I could do the same with a graph and vectors
 representing the eyes.}
 
-
 \subsection{Feature extraction}
-
+\improvements[inline,caption={}]{Short section stating that LBP (local binary
+patterns) was used and parameters. I can explain how it works with
+illustrations.}
 
 \subsection{Classification}
+\improvements[inline,caption={}]{
+    \begin{itemize}
+        \item cross-validation tool to compare feature pre-processing,
+            extraction methods, classifiers and their parameters.
+        \item training
+    \end{itemize}
+}
 
 %%% Local Variables: 
 %%% mode: latex

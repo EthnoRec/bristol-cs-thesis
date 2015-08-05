@@ -2,6 +2,22 @@
 \label{results}
 \section{Data collection}
 \label{results:collection}
+\begin{table}[t]
+    \begin{center}
+        \begin{tabular}{ c c c c }
+            \toprule
+            Country       & City              & Male   & Female \\ 
+            \toprule
+            Brazil  & Belo Horizonte &  4090 & 9688\\
+            India   & Mumbai         &  5014 & 3607\\
+            Mexico  & Guadalajara    &  4887 & 3861\\
+            Mexico  & Monterrey      &  6294 & 6234\\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \caption{Total images collected by location and gender}
+    \label{table:results:dc:total_images}
+\end{table}
 
 \section{Face and landmark detection}
 \label{results:fd}
@@ -53,6 +69,77 @@
     \caption{Histogram of scores given by the face detection algorithm to 23379 pictures.}
     \label{fig:results:fd:scores_hist}
 \end{figure}
+
+\section{Data analysis and classification}
+\begin{table}[b]
+      \centering
+      \begin{tabular}{l c c c}
+        \toprule
+        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
+        \midrule
+        India(actual)              & 0.62                     & 0.18                       & 0.2 \\
+        Brazil(actual)             & 0.2                      & 0.53                       & 0.27   \\
+        Mexico(actual)             & 0.23                     & 0.31                       & 0.46 \\
+        \addlinespace
+      \end{tabular}
+      \caption{LBP and SVM: Male groups}
+      \label{table:results:best_male_groups}
+    \end{table}
+
+    \begin{table}[b]
+      \centering
+      \begin{tabular}{l c c c}
+        \toprule
+        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
+        \midrule
+        India(actual)              & 0.67                     & 0.15                       & 0.18 \\
+        Brazil(actual)             & 0.18                     & 0.59                       & 0.23   \\
+        Mexico(actual)             & 0.2                      & 0.28                       & 0.52 \\
+        \addlinespace
+      \end{tabular}
+      \caption{LBP and SVM: Female groups}
+      \label{table:results:best_female_groups}
+    \end{table}
+These confusion matrices were calculated by selecting the top 500 faces for
+each group as scored by the face detector. The 1500 images were randomly split
+into training set (80\%) and test set (20\%), maintaining equal numbers of
+samples in each class for each iteration of 6-fold cross validation. 
+
+\improvements[inline,caption={}]{These results (Tables
+\ref{table:results:best_male_groups} and
+\ref{table:results:best_female_groups}) were obtained using the best feature
+extraction method (LBP) and classifier (SVM).}
+
+
+\begin{table}[b]
+      \centering
+      \begin{tabular}{l c c c}
+        \toprule
+        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
+        \midrule
+        India(actual)              &0.47&0.15&0.38\\  
+        Brazil(actual)             &0.48&0.16&0.36\\ 
+        Mexico(actual)             &0.44&0.15&0.41\\ 
+        \addlinespace
+      \end{tabular}
+      \caption{PCA(d=N-c)+LDA: Male groups}
+      \label{table:results:ff_male_groups}
+    \end{table}
+
+    \begin{table}[b]
+      \centering
+      \begin{tabular}{l c c c}
+        \toprule
+        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
+        \midrule
+        India(actual)              & 0.67                     & 0.15                       & 0.18 \\
+        Brazil(actual)             & 0.18                     & 0.59                       & 0.23   \\
+        Mexico(actual)             & 0.2                      & 0.28                       & 0.52 \\
+        \addlinespace
+      \end{tabular}
+      \caption{PCA(d=N-c)+LDA: Female groups}
+      \label{table:results:ff_female_groups}
+    \end{table}
 
 
 %%% Local Variables: 
