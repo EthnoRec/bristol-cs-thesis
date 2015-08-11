@@ -25,7 +25,7 @@ collection process.
 \end{center}
 \caption{Structure and interaction of face detection components. The actual
 face detection algorithm runs in the cluster on individual nodes. The database
-in this diagram is the same as in Figure \ref{fig:spec:diagram_collection}.}
+in this diagram is the same as in \Cref{fig:spec:diagram_collection}.}
 \label{fig:spec:diagram_detection}
 \end{figure}
 
@@ -62,8 +62,8 @@ component on a dedicated remote machine.
 \end{center}
 \caption{Part of the classification stage which is used to perform
 cross-validation to find the best features, classifier and classifier
-parameters. The database in this diagram is the same as in Figures
-\ref{fig:spec:diagram_collection} and \ref{fig:spec:diagram_detection}.}
+parameters. The database in this diagram is the same as in
+\Cref{fig:spec:diagram_collection} and \Cref{fig:spec:diagram_detection}.}
 \label{fig:spec:diagram_cvtrain}
 \end{figure}
 
@@ -89,7 +89,7 @@ is a simple task as the face detector results include the locations of both
 eyes. Since we have the actual eye positions and the target eye positions it is
 possible to calculate the angle, scale and translation factors needed to build
 a transformation matrix and apply affine transform. The transformation is the
-output of the Pre-processing step (Figure \ref{fig:spec:diagram_classify}). 
+output of the Pre-processing step (\Cref{fig:spec:diagram_classify}). 
 
 Next, features are extracted using local binary patterns and used in
 combination with user location data obtained in the data collection stage to
@@ -140,7 +140,7 @@ whose only purpose was to record profile metadata such as name, location and
 date birth as well as to save user-uploaded pictures. 
 
 This web application provides an API that allows an external tool 
-(\ref{spec:data:jobs}) to easily change the location of the user for this 
+(\Cref{spec:data:jobs}) to easily change the location of the user for this 
 application so that images are collected from several different 
 countries.
 
@@ -148,7 +148,7 @@ The web application must be used with a complementary Chrome extension
 (\texttt{tinder-gather-connect}) that handles Facebook authentication.
 Once the extension is installed a button to launch the app will appear in the 
 toolbar. As soon as the user signs in the app will be ready to accept data 
-collection jobs from the Tinder job manager tool (\ref{spec:data:jobs}).
+collection jobs from the Tinder job manager tool (\Cref{spec:data:jobs}).
 
 \subsection{Data collection and detection job manager}
 \label{spec:data:jobs}
@@ -177,7 +177,7 @@ saved into a database along with the filenames of images that are stored on
 disk in a single directory.
 
 This tool is also used to manage face and landmark detection jobs which will 
-be described in detail in Section \ref{spec:fd}. 
+be described in detail in \Cref{spec:fd}. 
 
 \section{Face and landmark detection}
 \label{spec:fd}
@@ -232,32 +232,32 @@ The locations of each part ($L = {l_i : i \in V}$) can be scored as follows:
     \text{Shape}_m(L) = \sum_{ij \in E_m} a_{ij}^m dx^2 + b_{ij}^m dx + c_{ij}^mdy^2 + d_{ij}^m dy 
 \end{flalign}
 
-Equation \ref{eq:spec:fd:App} computes the appearance evidence of part $i$
+\Cref{eq:spec:fd:App} computes the appearance evidence of part $i$
 using template $w_i^m$ which is tuned for mixture/viewpoint $m$. $\phi(I,l_i)$
 is the feature vector (e.g. Histogram of oriented gradients) at location $l_i$
 of image $I$.
 
-In Equation \ref{eq:spec:fd:Shape} $dx = x_i  - x_j$ and $dy = y_i - y_j$
+In \Cref{eq:spec:fd:Shape} $dx = x_i  - x_j$ and $dy = y_i - y_j$
 correspond to $x$ and $y$ displacements of part $i$ relative to part $j$. "Each
 term in the sum can be interpreted as a spring that introduces spatial
 constraints between a pair of parts, where the parameters $(a,b,c,d)$ specify
 the rest location and rigidity of each spring." \citep{zhu2012face}
 The $\alpha^m$ term refers to the bias of viewpoint mixture $m$. 
 
-The score from equation \ref{eq:spec:fd:S} was used to determine which face 
+The score from \Cref{eq:spec:fd:S} was used to determine which face 
 detection results were the most reliable and suitable for this project.
 
-The objective of the learning stage is to maximise $S(I,L,m)$ in Equation
-\ref{eq:spec:fd:S} over $L$ and $m$, i.e:
+The objective of the learning stage is to maximise $S(I,L,m)$ in
+\Cref{eq:spec:fd:S} over $L$ and $m$, i.e:
 \begin{equation}
 \label{eq:spec:fd:maxS}
 S^*(I) = \max_m[\max_L S(I,L,m)]
 \end{equation}
 
-Equation \ref{eq:spec:fd:maxS} says that for every mixture/viewpoint we find
-the best set of part/facial landmark locations $L$ as scored by Equation
-\ref{eq:spec:fd:S} and then choose the mixture with the highest score received.
-Maximisation over $L$ is performed using dynamic programming.
+\Cref{eq:spec:fd:maxS} says that for every mixture/viewpoint we find
+the best set of part/facial landmark locations $L$ as scored by
+\Cref{eq:spec:fd:S} and then choose the mixture with the highest score
+received. Maximisation over $L$ is performed using dynamic programming.
 
 \improvements[inline,caption={}]{
         Subsections I can expand on:
@@ -280,7 +280,7 @@ be used.
 
 Landmark points are placed on faces such that they outline the nose, eyes,
 mouth, jaw and the overall shape of the face. The particular groups of landmark
-locations are specified in Table \ref{table:spec:fd:landmarks}.
+locations are specified in \Cref{table:spec:fd:landmarks}.
 
 \begin{wraptable}{r}{5.5cm}
     \begin{tabular}{cc}\\\toprule  
@@ -311,8 +311,9 @@ disk it starts performing face detection on each image one-by-one and saving
 the output of the algorithm: the locations of landmarks, face angle and score,
 to a database.
 
+\subsection{Helper tools}
 Creating a list of image filenames to process was cumbersome so the Tinder job
-manager tool introduced in \ref{spec:data:jobs} was extended to support
+manager tool introduced in \Cref{spec:data:jobs} was extended to support
 creating such lists. 
 
 Usage information for this job action can be displayed by running the following
@@ -347,7 +348,19 @@ contains the hostname and credentials for the remote database server used by
 the data collection service. This is needed because the face detector will save
 detection results to that remote server.
 
+\subsection{Single image face detection}
+The components described so far can only be used to detect faces in bulk images
+for training and cross-validation purposes. They also require a running
+database server making it inconvenient to use separately for classifying single
+images.
+
+A separate program called \texttt{single-detect} was implemented to support
+detecting faces in a single image and saving the landmarks to a YAML file
+instead of the database which can later be used in conjunction with
+\texttt{analysis classify} (see \Cref{spec:analysis:software}).
+
 \section{Data analysis and classification}
+\label{spec:analysis}
 \improvements[inline,caption={}]{Everything mentioned here is actually
 implemented in a single script. I can talk about how these components interact
 inside it.}
@@ -358,7 +371,7 @@ the particular algorithms I have used at all?}
 
 
 \subsection{Pre-processing}
-\label{spec:preproc}
+\label{spec:analysis:preproc}
 \newcommand{\vleftright}{\vec{v}_i^{\text{left} \rightarrow \text{right}}}
 \newcommand{\vi}[1]{\vec{v}_i^{\text{#1}}}
 \newcommand{\vr}[1]{\vec{v}_{\text{ref}}^{\text{#1}}}
@@ -383,7 +396,7 @@ computed we must first calculate the rotation angle $\theta$, scaling factor
 $s$ and centre of the rotation $\vec{c}$ in the original image.
 
 \begin{equation}
-    \label{eq:spec:preproc:angle}
+    \label{eq:spec:analysis:preproc:angle}
     \theta = -\arccos{\frac{\vleftright \cdot \vref}{|\vleftright| |\vref|}}
 \end{equation}
 Angle $\theta$ is rotation of the original face relative to the target face
@@ -391,34 +404,33 @@ location and can be calculated as the angle between vectors $\vref$ and
 $\vleftright$ using the definition of the dot product.
 
 \begin{equation}
-    \label{eq:spec:preproc:scales}
+    \label{eq:spec:analysis:preproc:scales}
     s = \frac{|\vref|}{|\vleftright|}
 \end{equation}
 
 \begin{equation}
-    \label{eq:spec:preproc:centre}
+    \label{eq:spec:analysis:preproc:centre}
     \vec{c} = \frac{\vi{left} + \vi{right}}{2}
 \end{equation}
 The original image should be rotated around the midpoint of $\vi{left}$ and
 $\vi{right}$.
 
 \begin{equation}
-    \label{eq:spec:preproc:mat}
+    \label{eq:spec:analysis:preproc:mat}
     \begin{bmatrix}
     \alpha & \beta  & (1-\alpha)\cdot \vec{c}_x - \beta \cdot \vec{c}_y + \vec{t}_x \\
     -\beta & \alpha & \beta \cdot \vec{c}_x + (1-\alpha)\cdot \vec{c}_y + \vec{t}_y
     \end{bmatrix}
 \end{equation}
 Using the computed rotation angle and point of rotation we obtain a
-transformation matrix (\ref{eq:spec:preproc:mat}) to perform this operation
+transformation matrix (\Cref{eq:spec:analysis:preproc:mat}) to perform this operation
 using affine transform. In this equation $\alpha = s\cos\theta$ and $\beta =
 s\sin\theta$. An additional translation vector ($\vec{t}$) was added to the
 third column in this matrix to move the midpoint of the eyes in the image to
-the same location as the midpoint of the reference eye locations (Equation
-\ref{eq:spec:preproc:midtr}). 
+the same location as the midpoint of the reference eye locations (\Cref{eq:spec:analysis:preproc:midtr}). 
 
 \begin{equation}
-    \label{eq:spec:preproc:midtr}
+    \label{eq:spec:analysis:preproc:midtr}
     \vec{t} = \frac{\vi{left} + \vi{right}}{2} - \frac{\vr{left} + \vr{right}}{2}
 \end{equation}
 After this transformation the distance between eyes and their locations
@@ -436,7 +448,7 @@ pixel location by thresholding intensities of the neighbouring pixels to its
 own so that those that are higher or equal become 1 and lower become 0.
 Thresholded intensities of the neighbouring pixels are followed clockwise or
 anti-clockwise become a single bit string that can also be represented as a
-decimal as shown in Equation \ref{eq:spec:features:lbp}.
+decimal as shown in \Cref{eq:spec:features:lbp}.
 
 \begin{equation}
 \label{eq:spec:features:lbp}
@@ -459,6 +471,29 @@ information and extremely fast as it is easily parallelised.
 Classification was done using a linear kernel Support Vector Machine and
 penalty parameter $C = 1$.
 
+\subsection{Software project and interaction with other components}
+\label{spec:analysis:software}
+Pre-processing, feature extraction and classification are all a part of the
+same software project which can be found in the \texttt{data-analysis}
+repository. The project has a single command-line script called
+\texttt{analysis} which supports three actions: \texttt{xvalid}, \texttt{train}
+and \texttt{classify}. A YAML configuration file with one or more experiments must
+be provided using the \texttt{-{}-config} option. An experiment details the
+feature extraction method, classifier, classes and cross-validation parameters.
+
+\texttt{analysis xvalid} performs cross-validation using the settings in the
+configuration file and outputs a file containing a confusion matrix, recall,
+precision and F1-scores for every class and every experiment.
+
+\texttt{analysis train} uses the first experiment in the configuration file to
+train a model and save it to a file which can then used to classify a single
+image.
+
+\texttt{analysis classify} loads the model which must have filename
+\texttt{model.pkl} and be located in the same directory and takes two options:
+\texttt{-{}-image} and \texttt{-{}-landmarks} which is a YAML file containing
+the results of single image face detection performed by \texttt{single-detect}
+from the \texttt{face-detection} repository.
 
 %%% Local Variables: 
 %%% mode: latex
