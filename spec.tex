@@ -429,19 +429,36 @@ transformation? For example: original, rotated, scaled, translated.}
 \unsure[inline]{Alternatively, I could do the same with a graph and vectors
 representing the eyes.}
 
-\subsection{Feature extraction}
-\improvements[inline,caption={}]{Short section stating that LBP (local binary
-patterns) was used and parameters. I can explain how it works with
-illustrations.}
+\subsection{Feature extraction and classification}
+Features were extracted from the pre-processed images using the Local Binary
+Patterns operator. The LBP operator calculates a feature vector for a single
+pixel location by thresholding intensities of the neighbouring pixels to its
+own so that those that are higher or equal become 1 and lower become 0.
+Thresholded intensities of the neighbouring pixels are followed clockwise or
+anti-clockwise become a single bit string that can also be represented as a
+decimal as shown in Equation \ref{eq:spec:features:lbp}.
 
-\subsection{Classification}
-\improvements[inline,caption={}]{
-    \begin{itemize}
-        \item cross-validation tool to compare feature pre-processing,
-            extraction methods, classifiers and their parameters.
-        \item training
-    \end{itemize}
-}
+\begin{equation}
+\label{eq:spec:features:lbp}
+LBP_{P,R} = \sum_{p=0}^{P-1} sign(g_p - g_c)2^p  \qquad sign(x) = \
+\begin{cases}
+    1 \quad \text{if} \enspace x \geq 0 \\
+    0 \quad \text{otherwise} \\
+\end{cases}
+\end{equation}
+
+The image is split into small cells, such as $4 \times 4$ in our case, and the
+LBP value is calculated for every pixel in every cell. Next, a histogram of LBP
+values is generated for each cell and then these histograms are concatenated.
+The end result is a concatenated vector of bin counts which can be used as a
+feature vector in a classifier such as a Support Vector Machine.
+
+This algorithm is very simple, yet it is very effective for encoding texture
+information and extremely fast as it is easily parallelised.
+
+Classification was done using a linear kernel Support Vector Machine and
+penalty parameter $C = 1$.
+
 
 %%% Local Variables: 
 %%% mode: latex
