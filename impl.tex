@@ -255,14 +255,33 @@ to split the list of images into smaller lists that can be passed to the face
 detector executable.
 
 \section{Data analysis and classification}
-\improvements[inline,caption={}]{Python script using numpy/scipy+OpenCV
-bindings for pre-processing and numpy/scipy+scikit-learn for feature extraction
-and classification.}
+The entire data analysis and classification stage was implemented in Python
+relying on a number of additional packages for image processing, linear
+algebra, machine learning and plotting. The dependencies for this project can
+be found in the \texttt{requirements.txt} file in the \texttt{data-analysis}
+repository. The same file is also used by \texttt{pip}\footnote{Popular Python
+package manager.} to download all these dependencies at once.
+
+Before the main \texttt{analysis} script can be used the following commands
+must first be executed:
+\begin{logs}
+virtualenv env
+source env/bin/activate
+pip install -r requirements.txt
+\end{logs}
+The first two commands create and activate \texttt{virtualenv} which is used to
+manage project dependencies locally and without root access. Next, \texttt{pip}
+installs the dependencies in the previously created virtual environment.
+
 \subsection{Pre-processing}
+As covered in \Cref{spec:analysis:preproc}, the pre-processing stage involved
+using the landmark locations put into the PostgreSQL database by the face
+detector component to scale, rotate and translate the images so that eye
+locations are the same for every image. This was done using numpy for linear
+algebra functions to calculate a transformation matrix and OpenCV to perform
+affine transformation using this matrix.
 
-\subsection{Feature extraction}
-
-\subsection{Classification}
+\subsection{Feature extraction and classification}
 
 %%% Local Variables: 
 %%% mode: latex
