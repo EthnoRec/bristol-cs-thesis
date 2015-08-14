@@ -262,16 +262,29 @@ be found in the \texttt{requirements.txt} file in the \texttt{data-analysis}
 repository. The same file is also used by \texttt{pip}\footnote{Popular Python
 package manager.} to download all these dependencies at once.
 
+Unfortunately, not all dependencies could be added to the requirements file as
+many of them also depend on certain DEB packages. In order to mitigate these
+issues the \texttt{data-analysis} project was modified to run as a Docker
+\citep{docker} container so that it could be run on almost any recent Linux
+system with minimum configuration.
+
 Before the main \texttt{analysis} script can be used the following commands
 must first be executed:
 \begin{logs}
-virtualenv env
-source env/bin/activate
-pip install -r requirements.txt
+    docker build -t="larcher/er-data-analysis" . 
+    docker run -i -t larcher/er-data-analysis
 \end{logs}
-The first two commands create and activate \texttt{virtualenv} which is used to
-manage project dependencies locally and without root access. Next, \texttt{pip}
-installs the dependencies in the previously created virtual environment.
+This will start a Docker container and a shell within it from which the main
+script \texttt{analysis} can be used. The script uses a configuration file
+(\texttt{servers.yaml}) which is used to instruct the data analysis project how
+to connect to the PostgreSQL database and where to get the images from. Since
+it is an isolated container it will need to download the images from a simple
+HTTP server whish serves files from \texttt{tinder-gather/gather-images}. This
+can be easily done by executing the following command in the
+\texttt{tinder-gather/gather-images} directory:
+\begin{logs}
+    python3 -m http.server 58001
+\end{logs}
 
 \subsection{Pre-processing}
 As covered in \Cref{spec:analysis:preproc}, the pre-processing stage involved
@@ -282,6 +295,23 @@ algebra functions to calculate a transformation matrix and OpenCV to perform
 affine transformation using this matrix.
 
 \subsection{Feature extraction and classification}
+Initially this stage used an implementation of local binary patterns written
+specifically for this project, however it was later replaced by a Python
+package \citep{facerec} which supports using local binary patterns for feature
+extraction and also takes care of classification and model serialisation and
+deserialisation.
+
+The support vector machine classifier used in \texttt{facerec} is actually a
+wrapper around the \texttt{scikit-learn} implementation of support vector
+machines.
+
+The feature extraction method, classifier, classes and cross-validation
+parameters are specified in a YAML configuration file which supports running
+several experiments at once. 
+
+Experiments can be added to the \texttt{exs} array in the YAML file. For
+example, a basic configuration for a single experiment could look like this:
+\inputminted{yaml}{code/da_simple.yaml}
 
 %%% Local Variables: 
 %%% mode: latex

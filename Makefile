@@ -1,3 +1,3 @@
 all:
 	bibtex thesis
-	xelatex thesis
+	xelatex -shell-escape thesis

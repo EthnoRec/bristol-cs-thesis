@@ -1,0 +1,35 @@
+logger:
+    file:       experiments.results
+    level:      info
+exs:
+    - eyefitting:
+        # All images will be scaled to these dimensions
+        size:       [128,128]
+      feature:      
+        # Feature (class from facerec.feature)
+        name:       SpatialHistogram
+        # Feature parameters can be added here
+        sz:         [4,4]
+      classifier:   
+        # Classifier (class from facerec.classifier)
+        name:       SVMSK
+        # Classifier parameters can be added here
+        kernel:     linear
+        C:          1
+      crossvalidation: 
+        k:          6
+        test_size:  0.2
+        # Number of cross-validation instances to be performed in parallel
+        vgsize:     3
+      classes: 
+        - city:     Mumbai
+          country:  India
+          id:       0
+          # Male=0, Female=1
+          gender:   1
+          n:        500
+        - city:     Belo Horizonte
+          country:  Brazil
+          id:       1
+          gender:   1
+          n:        500
