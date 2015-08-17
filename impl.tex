@@ -215,7 +215,7 @@ which is specified as part of a data collection job (see \ref{spec:data:jobs}).
 \section{Face and landmark detection}
 \label{impl:fd}
 The original face detection algorithm introduced by \citep{zhu2012face} was
-implemented in Matlab and was deemed unsuitable to be incorporated into this
+implemented in MATLAB and was deemed unsuitable to be incorporated into this
 project as it would have been difficult to integrate it with other parts of the
 system. Luckily, there was an existing implementation of the same algorithm in
 C++ by eHarmony \citep{eHphotofeature}. This implementation produced a single
@@ -279,7 +279,7 @@ script \texttt{analysis} can be used. The script uses a configuration file
 (\texttt{servers.yaml}) which is used to instruct the data analysis project how
 to connect to the PostgreSQL database and where to get the images from. Since
 it is an isolated container it will need to download the images from a simple
-HTTP server whish serves files from \texttt{tinder-gather/gather-images}. This
+HTTP server which serves files from \texttt{tinder-gather/gather-images}. This
 can be easily done by executing the following command in the
 \texttt{tinder-gather/gather-images} directory:
 \begin{logs}
