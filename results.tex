@@ -63,6 +63,33 @@ contribute to the numbers.}
     \label{table:results:fd:detected}
 \end{table}
 
+Every face detection has a score which determines how good the detection is.
+\Cref{fig:results:fd:scores_hist} shows how the detection scores are
+distributed relative to other classes.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/scores_hist_Guadalajara_Belo_Horizonte}
+      \caption{\textcolor{red}{Guadalajara} - \textcolor{green}{Belo Horizonte}}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/scores_hist_Guadalajara_Mumbai}
+      \caption{\textcolor{red}{Guadalajara} - \textcolor{orange}{Mumbai}}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/scores_hist_Mumbai_Belo_Horizonte}
+      \caption{\textcolor{orange}{Mumbai} - \textcolor{green}{Belo Horizonte}}
+    \end{subfigure}
+\caption{Normalised histogram of scores given by the face detection algorithm
+to images from various locations. The blue dashed line represents the
+normalised frequencies for all detections. Higher is better.}
+\label{fig:results:fd:scores_hist}
+\end{figure}
+
+\Cref{fig:results:fd:good_detected} and \Cref{fig:results:fd:other_detected}
+show examples of face detections with various scores.
+
 \begin{figure}
     \centering
     \begin{subfigure}[b]{0.3\textwidth}
@@ -101,15 +128,12 @@ contribute to the numbers.}
       \caption{Face detection with score=-0.517613 in lower quartile}
       \label{fig:results:fd:q1_detected3}
     \end{subfigure}
-\caption{Examples of inferior face pictures. Cropped foreheads, blurriness, sunglasses and small faces are some obvious reasons why a face detection might have received a low score.}
+\caption{Examples of inferior face pictures. Cropped foreheads, blurriness,
+sunglasses and small faces are some obvious reasons why a face detection might
+have received a low score.}
 \label{fig:results:fd:other_detected}
 \end{figure}
 
-\begin{figure}
-    \includegraphics[width=\textwidth]{figures/results/scores_hist}
-    \caption{Histogram of scores given by the face detection algorithm to 23379 images.}
-    \label{fig:results:fd:scores_hist}
-\end{figure}
 
 \section{Data analysis and classification}
 \begin{table}[b]
