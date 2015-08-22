@@ -1,17 +1,33 @@
 \chapter{Results and discussion}
 \label{results}
+Summarise the results...
+
 \section{Data collection}
 \label{results:collection}
+Brazil, Mexico and India have been chosen for this experiment as Tinder is very
+popular in these countries \citep{tinderPopular} and have much smaller
+proportions of immigrant population compared to other countries in which Tinder
+is popular such as the United States and the United Kingdom
+\citep{desa2013trends}.
+
+Using the state-of-art race recognition algorithms faces from Brazil and Mexico
+would be classified as Hispanic so it would be interesting to see how well it
+is possible to split this single class further. 
+
+A non-capital city was chosen in each of the three countries and the data
+collection service was tasked with setting its own location to those cities one
+at a time and collecting pictures from local profiles for several days. The
+breakdown of images collected per gender and location is summarised in
+\Cref{table:results:dc:total_images}.
 \begin{table}[t]
     \begin{center}
-        \begin{tabular}{ c c c c }
+        \begin{tabular}{ c c c c c }
             \toprule
-            Country       & City              & Male   & Female \\ 
+            Country       & City              & Male   & Female & Total \\ 
             \toprule
-            Brazil  & Belo Horizonte &  4090 & 9688\\
-            India   & Mumbai         &  5014 & 3607\\
-            Mexico  & Guadalajara    &  4887 & 3861\\
-            Mexico  & Monterrey      &  6294 & 6234\\
+            Brazil  & Belo Horizonte &  4090 & 9688 & 13778\\
+            India   & Mumbai         &  5014 & 3607 & 8621 \\
+            Mexico  & Guadalajara    &  4887 & 3861 & 8748\\
             \bottomrule
         \end{tabular}
     \end{center}
@@ -21,6 +37,31 @@
 
 \section{Face and landmark detection}
 \label{results:fd}
+Images collected in the previous stage were passed through the face detection
+stage to determine the presence of one or more faces and estimate the locations
+of key facial landmarks. On average, the algorithm took around $6.5$ seconds to
+perform face detection in a single image. Due to this limitation it was not
+possible to detect faces in all images collected, however it was ensured that
+at least 3000 images per location and gender passed through the face detection
+stage. The actual numbers of images in which face detection was attempted can
+be seen in \Cref{table:results:fd:detected}.
+\begin{table}[t]
+    \begin{center}
+        \begin{tabular}{ c c c c}
+            \toprule
+            Country       & City              & Male   & Female\\ 
+            \toprule
+            Brazil  & Belo Horizonte &  3303 (81\%) & 6193 (64\%)\\
+            India   & Mumbai         &  3771 (75\%) & 3149 (87\%)\\
+            Mexico  & Guadalajara    &  3230 (66\%) & 3650 (95\%)\\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \caption{Numbers and percentages of images passed through the face
+    detection stage. Images in which there were no faces detected also
+contribute to the numbers.}
+    \label{table:results:fd:detected}
+\end{table}
 
 \begin{figure}
     \centering
@@ -66,7 +107,7 @@
 
 \begin{figure}
     \includegraphics[width=\textwidth]{figures/results/scores_hist}
-    \caption{Histogram of scores given by the face detection algorithm to 23379 pictures.}
+    \caption{Histogram of scores given by the face detection algorithm to 23379 images.}
     \label{fig:results:fd:scores_hist}
 \end{figure}
 
