@@ -64,15 +64,33 @@ This is required because LDA involves finding the inverse of within-class
 scatter matrix which becomes singular (and thus not invertible) if the number
 of training samples exceeds $N-c$.
 
-%LDA calculations rely on finding the inverse of within-class scatter matrix
-%which is a sum of matrices of rank 1 since every feature vector is centered
-%around its own class mean and multiplied by the transpose of this centred
-%feature vector. If the number of features exceeds the number of training
-%instances then (?)
+\subsection{Review of the Chinese ethnic groups recogniton study}
+The closest study to the aim of this project is \citep{chinesegroups} which
+describes two methods of extracting features and classifying three Chinese
+ethnic groups: Tibetan, Uyghur and Zhuang.
 
-\improvements[inline,caption={}]{Review of \citep{chinesegroups} - recognition
-of different Chinese ethnic groups (the most relevant paper to the aim of this
-project).}
+Images used in their experiment were converted to grey-scale, had the
+backgrounds removed and manually controlled for rotation, translation and scale
+invariance. The images were then transformed by PCA to reduce the dimension of
+each image to $N-c$ followed by computing LDA feature vectors.
+
+A k-Nearest Neighbours classifier was constructed with $k=5$ which was obtained
+by evaluating the accuracy of this classifier with different values of $k$ and
+selecting the best one. This was done using $150$ training set samples and $70$
+test set samples for each class. The correct recognition rates for Tibetan,
+Uyghur and Zhuang classes were $0.771429$, $0.785714$ and $0.814286$,
+respectively.
+
+The other method is geometrical and uses manually crafted elastic landmark
+templates which are matched to images of faces using Gabor wavelets. It uses a
+commercial decision tree classifier called C5.0. The average correct
+recognition rate for the same three classes is $0.9095$.
+
+This particular approach has not been attempted in this project as it requires
+facial landmarks to be annotated by hand. It would have required a great amount
+of human labour every time a new class is added and in the study above the
+annotations have been made by experts. Taking all these factors into
+consideration this approach was deemed outside the scope of this project.
 
 
 %%% Local Variables: 
