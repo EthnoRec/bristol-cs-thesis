@@ -259,15 +259,6 @@ the best set of part/facial landmark locations $L$ as scored by
 \Cref{eq:spec:fd:S} and then choose the mixture with the highest score
 received. Maximisation over $L$ is performed using dynamic programming.
 
-\improvements[inline,caption={}]{
-        Subsections I can expand on:
-        \begin{itemize}
-            \item Learning specifics
-            \item Results/performance comparison with other face detection
-                systems (including Viola-Jones)
-        \end{itemize}
-}
-
 There is a total of 13 viewpoints ranging from $-180^\circ$ to $180^\circ$ in
 $15^\circ$ increments. For frontal face pictures, where the viewpoint is
 between $-45^\circ$ and $45^\circ$, there are 68 landmarks and 39 landmarks for
@@ -361,15 +352,6 @@ instead of the database which can later be used in conjunction with
 
 \section{Data analysis and classification}
 \label{spec:analysis}
-\improvements[inline,caption={}]{Everything mentioned here is actually
-implemented in a single script. I can talk about how these components interact
-inside it.}
-
-\unsure[inline]{I have tried many pre-processing techniques, feature extraction
-methods and classifiers. Should I only mention my final choices or not mention
-the particular algorithms I have used at all?}
-
-
 \subsection{Pre-processing}
 \label{spec:analysis:preproc}
 \newcommand{\vleftright}{\vec{v}_i^{\text{left} \rightarrow \text{right}}}
@@ -436,10 +418,6 @@ the same location as the midpoint of the reference eye locations (\Cref{eq:spec:
 After this transformation the distance between eyes and their locations
 ($\vi{left}$ and $\vi{right}$) should match the reference eye locations
 ($\vr{left}$ and $\vr{right}$).
-\unsure[inline]{Should I put here step-by-step snapshots of face
-transformation? For example: original, rotated, scaled, translated.}
-\unsure[inline]{Alternatively, I could do the same with a graph and vectors
-representing the eyes.}
 
 \subsection{Feature extraction and classification}
 Features were extracted from the pre-processed images using the Local Binary
