@@ -81,7 +81,7 @@ distributed relative to other classes.
       \includegraphics[width=\textwidth]{figures/results/scores_hist_Mumbai_Belo_Horizonte}
       \caption{\textcolor{orange}{Mumbai} - \textcolor{green}{Belo Horizonte}}
     \end{subfigure}
-\caption{Normalised histogram of scores given by the face detection algorithm
+\caption{Normalised histograms of scores given by the face detection algorithm
 to images from various locations. The blue dashed line represents the
 normalised frequencies for all detections. Higher is better.}
 \label{fig:results:fd:scores_hist}
@@ -136,45 +136,24 @@ have received a low score.}
 
 
 \section{Data analysis and classification}
-\begin{table}[b]
-      \centering
-      \begin{tabular}{l c c c}
-        \toprule
-        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
-        \midrule
-        India(actual)              & 0.62                     & 0.18                       & 0.2 \\
-        Brazil(actual)             & 0.2                      & 0.53                       & 0.27   \\
-        Mexico(actual)             & 0.23                     & 0.31                       & 0.46 \\
-        \addlinespace
-      \end{tabular}
-      \caption{LBP and SVM: Male groups}
-      \label{table:results:best_male_groups}
-    \end{table}
+The data analysis software (\Cref{spec:analysis:software}) was designed and
+implemented in such a way that the performance of different feature extraction
+methods, classifiers and various parameters could be easily be compared by
+creating separate configuration files for each setup.
 
-    \begin{table}[b]
-      \centering
-      \begin{tabular}{l c c c}
-        \toprule
-        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
-        \midrule
-        India(actual)              & 0.67                     & 0.15                       & 0.18 \\
-        Brazil(actual)             & 0.18                     & 0.59                       & 0.23   \\
-        Mexico(actual)             & 0.2                      & 0.28                       & 0.52 \\
-        \addlinespace
-      \end{tabular}
-      \caption{LBP and SVM: Female groups}
-      \label{table:results:best_female_groups}
-    \end{table}
-These confusion matrices were calculated by selecting the top 500 faces for
-each group as scored by the face detector. The 1500 images were randomly split
-into training set (80\%) and test set (20\%), maintaining equal numbers of
-samples in each class for each iteration of 6-fold cross validation. 
+The first attempt involved using Linear Discriminant Analysis (LDA) for feature
+extraction and k-Nearest Neighbours to replicate the results from the most
+similar study to this project - \citep{chinesegroups}. The average true
+positive rate for this study was $0.7905$ across 3 classes.
 
-\improvements[inline,caption={}]{These results (Tables
-\ref{table:results:best_male_groups} and
-\ref{table:results:best_female_groups}) were obtained using the best feature
-extraction method (LBP) and classifier (SVM).}
+Images had to undergo PCA transformation to reduce the their dimensions to $N -
+c$ where $N$ is the number of training samples and $c$ is the number of
+classes. This was required in order to make the covariance matrix full rank so
+that it could be inverted when calculating the LDA weight vector.
 
+Using the same approach as in this study resulted in rather poor classifier
+performance as indicated in confusion matrices shown in
+\Cref{table:results:ff_male_groups} and \Cref{table:results:ff_female_groups}.
 
 \begin{table}[b]
       \centering
@@ -205,12 +184,192 @@ extraction method (LBP) and classifier (SVM).}
   \caption{PCA(d=N-c)+LDA and kNN(k=5): Female groups}
   \label{table:results:ff_female_groups}
 \end{table}
-Tables \ref{table:results:ff_male_groups} and
-\ref{table:results:ff_female_groups} are confusion matrices produced using the
-same feature extraction method and classifier setup as \citep{chinesegroups}.
 
+The most likely reason for this is the lack of manually collected, high quality
+dataset used in the \citep{chinesegroups} study. Experimenting with a wide
+range of values for the number of dimensions used in PCA and LDA
+transformations showed no significant change in classifier accuracy so this
+approach was dismissed in favour of local binary patterns which proved to be
+quite successful in a number of major-race classification studies
+\citep{muhammadg}.
+
+Using a support vector machine in combination with local binary patterns showed
+consistent increase in classifier performance. The best SVM penalty parameter
+$C$ was calculated to be $C=0.6$. The confusion matrices for male and female
+subjects using this approach are shown in \Cref{table:results:best_male_groups}
+and \Cref{table:results:best_female_groups}.
+
+\begin{table}[b]
+      \centering
+      \begin{tabular}{l c c c}
+        \toprule
+        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
+        \midrule
+        India(actual)              & 0.62                     & 0.18                       & 0.2 \\
+        Brazil(actual)             & 0.2                      & 0.53                       & 0.27   \\
+        Mexico(actual)             & 0.23                     & 0.31                       & 0.46 \\
+        \addlinespace
+      \end{tabular}
+      \caption{LBP and SVM: Male groups}
+      \label{table:results:best_male_groups}
+    \end{table}
+
+    \begin{table}[b]
+      \centering
+      \begin{tabular}{l c c c}
+        \toprule
+        &                    India(predicted)                 & Brazil(predicted)          & Mexico(predicted) \\
+        \midrule
+        India(actual)              & 0.67                     & 0.15                       & 0.18 \\
+        Brazil(actual)             & 0.18                     & 0.59                       & 0.23   \\
+        Mexico(actual)             & 0.2                      & 0.28                       & 0.52 \\
+        \addlinespace
+      \end{tabular}
+      \caption{LBP and SVM: Female groups}
+      \label{table:results:best_female_groups}
+    \end{table}
+
+These confusion matrices were calculated by selecting the top 600 faces for
+each group as scored by the face detector. The 1800 images were randomly split
+into training set (80\%) and test set (20\%), maintaining equal numbers of
+samples in each class for each iteration of 6-fold cross validation. 
+
+
+\subsection{Misclassified examples}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/misclassification/india-india.jpg}
+      \caption{Correctly classified as Indian}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/misclassification/india-brazil.jpg}
+      \caption{Misclassified as Brazilian}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/misclassification/india-mexico.jpg}
+      \caption{Misclassified as Mexican}
+    \end{subfigure}
+\caption{Correct and incorrect classifications of Indian subjects}
+\label{fig:results:dc:misclass:india}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/misclassification/brazil-brazil.jpg}
+      \caption{Correctly classified as Brazilian}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/misclassification/brazil-india.jpg}
+      \caption{Misclassified as Indian}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{figures/results/misclassification/brazil-mexico.jpg}
+      \caption{Misclassified as Mexican}
+    \end{subfigure}
+\caption{Correct and incorrect classifications of Brazilian subjects}
+\label{fig:results:dc:misclass:brazil}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/misclassification/mexico-mexico.jpg}
+      \caption{Correctly classified as Mexican}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+      \includegraphics[width=\textwidth]{figures/results/misclassification/mexico-india.jpg}
+      \caption{Misclassified as Indian}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.3\textwidth}
+        \includegraphics[width=\textwidth]{figures/results/misclassification/mexico-brazil.jpg}
+      \caption{Misclassified as Brazilian}
+    \end{subfigure}
+\caption{Correct and incorrect classifications of Mexican subjects}
+\label{fig:results:dc:misclass:mexico}
+\end{figure}
+
+\section{Conclusion}
+The lack of the required data for this project was a hindrance and is the
+reason for rather low classifier accuracy compared to the \citep{chinesegroups}
+study, however this obstacle was used as motivation to explore the feasibility
+of automatic data collection.
+
+Images collected from a social network like Tinder come with an incredible
+amount of noise and many additional steps are required to make this data as
+useful as possible. In this project a face and landmark detector was used to
+score images by their closeness to a series of predefined templates which
+should match good pictures of human faces. The second stage of pre-processing
+involved rotating, scaling and translating the images to ensure that most face
+landmarks line up.
+
+The accuracies achieved are within the expected range due given the quality of
+the data and the difficult nature of determining one's location of origin. It
+is impossible to come even close to 100\% accuracy as there is an incredible
+number of possible classes considering how much different populations have
+mixed in the history of humankind. 
+
+\section{Future work}
+Assigning classes like \textit{Indian} or \textit{Brazilian} is a simple
+approach which will give us enough information, however it is flawed as it is
+impossible to belong purely to a single race. A far better alternative would be
+to give a list of possible locations from which a person is likely to originate
+from. This list could be coupled with a list of probabilities to show the most
+likely location first. This approach would work better with people of mixed
+origin and in less ethnically homogeneous countries such as the United States.
+
+Currently, the classifier requires different pre-trained models for male and
+female subjects, however this requirement could be removed by incorporating a
+gender recognition classifier.
+
+\subsection{Pre-processing}
+Computer-collected images have been adjusted for some landmark locations,
+however the level of pre-process is by no means comprehensive and an additional
+study may be required to assess a wider range of pre-processing methods. This
+could include cropping faces by all landmarks appearing on the edges so that
+the bounding area for rejecting the background is a polygon instead of a
+rectangle. This approach would eliminate almost all background and thus
+decrease noise in the data, potentially increasing classifier accuracy.
+
+
+\subsection{Alternative features and classifiers}
+The best method of feature extraction for this project was found to be local
+binary patterns performed on the pre-processed image data, however it would
+definitely be worth investigating if using a combination of other features
+could improve classifier accuracy. There is a total of 68 landmarks detected in
+each frontal face image which encode a substantial amount of new information
+about images that otherwise would not be decoded using local binary patterns.
+
+In the field of face recogniton (recognising individual people) convolutional
+networks are becoming increasingly more popular and achieve the highest
+accuracies as measured by Area Under Curve (AUC) in the Labelled Faces in the
+Wild (LFW) dataset benchmark \citep{LFWTechUpdate}. It may prove insightful to
+explore the feasibility of using convolutional networks to solve the problem
+discussed in this project as it may significantly improve classifier
+performance. It would also be important to consider collecting significantly
+more data than what is currently used.
+
+\subsection{Implementation}
+One of the biggest bottlenecks of the current pipeline (data collection
+$\rightarrow$ face detection $\rightarrow$ classification) is the face detection
+algorithm which takes $6.5$ seconds per image on average. The algorithm is
+implemented in C++ and uses BLAS to perform various linear algebra computations
+and after a thorough examination of the algorithm implementation there were no
+obvious factors found which could contribute to its poor performance. It may be
+useful to consider adapting some of its linear algebra operations to use
+OpenCL.
+
+The entire data analysis and classification suite is written in Python and
+despite relying heavily on the highly optimised \texttt{numpy} package its
+performance may be significantly improved by porting the current implementation
+to C++, Julia or even Rust. The motivation for switching to a different
+language originated in the process of implementing a parallel cross-validation
+class which was problematic due to CPython's Global Interpreter Lock (GIL)
+which severely reduces the speedup of using threads. 
 
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "thesis"
 %%% End: 
+

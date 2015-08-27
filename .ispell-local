@@ -13,7 +13,9 @@ config
 createdAt
 Cuser
 da
+dc
 DCJM
+desa
 deserialisation
 DetectionJobs
 df
@@ -34,10 +36,12 @@ fbconnect
 fd
 FDJM
 fea
+ff
 fileName
 Fsuccess
 gdp
 gotinder
+hist
 HoG
 Horizonte
 html
@@ -46,6 +50,7 @@ https
 jpg
 js
 JSON
+kNN
 larcher
 lat
 latin
@@ -76,6 +81,7 @@ scipy
 Sequelize
 showtrims
 SVM
+tinderPopular
 tjob
 ttstamp
 txt
