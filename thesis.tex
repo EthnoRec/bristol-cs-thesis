@@ -1,9 +1,14 @@
 %!TEX encoding = ISO-8859-1
 
-\documentclass[%
-10pt,%
-showtrims%
-]{memoir}
+%\documentclass[%
+%\papersize,
+%10pt,%
+%a4paper,
+%%showtrims%
+%]{memoir}
+
+\documentclass[a4paper,twoside]{memoir}
+
 
 % metadata
 \title{Ethnogeographic Recognition Through Facial Feature Classification}
@@ -39,6 +44,12 @@ showtrims%
 \usepackage{subcaption}
 \usepackage{minted}
 \usepackage[noabbrev]{cleveref}
+
+\copypagestyle{thesis}{Ruled}
+\pagestyle{thesis}
+\makeevenfoot{thesis}{}{\thepage}{} %
+\makeoddfoot{thesis}{}{\thepage}{}  %
+
 
 % notes
 \usepackage{xargs}                      
@@ -117,9 +128,9 @@ showtrims%
 % e = 297/4 (fore-edge)
 % f = 297/4 (foot)
 %\setstocksize{24cm}{17cm}
-\settrimmedsize{24cm}{17cm}{*}
-\setlrmarginsandblock{37.125mm}{*}{*}
-\setulmarginsandblock{37.125mm}{*}{*}
+%\settrimmedsize{24cm}{17cm}{*}
+\setlrmarginsandblock{4cm}{3cm}{*}
+\setulmarginsandblock{1in}{*}{*}
 \setmarginnotes{17pt}{51pt}{\onelineskip}
 \setheadfoot{\onelineskip}{2\onelineskip}
 \setheaderspaces{*}{2\onelineskip}{*}
@@ -291,7 +302,6 @@ showtrims%
 
 \chapterstyle{thesis}
 
-\pagestyle{Ruled}
 
 \include{introduction}
 
