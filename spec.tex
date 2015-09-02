@@ -48,13 +48,12 @@ process of detecting faces in thousands of pictures becomes as modular as
 possible. As a result, a concept of detection jobs was introduced so that images
 could be processed in parallel on several machines.
 
-Face Detection Job Manager (FDJM) is a tool which is similar to
-DCJM\footnote{Data Collection Job Manager} and provides a command line
-interface to select images to go through the face detector. The output of this
-tool upon a successful creation of a detection job is a numeric ID of the job.
-This ID can then be provided to the Face Detection Worker Prepare tool which
-creates an archive with the required files to be processed by the face detector
-component on a dedicated remote machine.
+Face Detection Job Manager (FDJM) is a tool which is similar to \ac{DCJM} and
+provides a command line interface to select images to go through the face
+detector. The output of this tool upon a successful creation of a detection job
+is a numeric ID of the job.  This ID can then be provided to the Face Detection
+Worker Prepare tool which creates an archive with the required files to be
+processed by the face detector component on a dedicated remote machine.
 
 \begin{figure}
 \begin{center}

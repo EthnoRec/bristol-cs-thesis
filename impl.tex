@@ -114,7 +114,7 @@ this point on.
 Before we can use it to authenticate with Tinder the Facebook user ID must 
 also be obtained by accessing 
 \texttt{https://graph.facebook.com/me?access\_token=\textbf{<access\_token>}}.
-The response to this request is a JSON object which contains the Facebook user 
+The response to this request is a \ac{JSON} object which contains the Facebook user 
 ID under the property \texttt{id}, which will be known as 
 \texttt{<fb\_user\_id>}.
 
@@ -130,7 +130,7 @@ POST https://api.gotinder.com/auth
 }
 \end{logs}
 
-The response to this request is a JSON object containing Tinder's own 
+The response to this request is a \ac{JSON} object containing Tinder's own 
 authentication token and user ID. Tinder's authentication token is saved in 
 memory and sent as an HTTP header \texttt{X-Auth-Token} with every request 
 after authentication.
@@ -169,7 +169,7 @@ The \texttt{limit} option refers to the maximum number of users that can be
 fetched at once. The value for \texttt{limit} comes from the corresponding 
 data collection job (\ref{spec:data:jobs}).
 
-The JSON response contains a property called \texttt{results} which is an 
+The \ac{JSON} response contains a property called \texttt{results} which is an 
 array of profiles (\texttt{Array<Profile>}). Every profile contains properties 
 as specified in Table \ref{table:profile-properties}.
 \begin{table}
@@ -226,7 +226,7 @@ It was modified to read a list of new line character-separated list of image
 filenames as standard input so that it could process them in bulk. Instead of
 labelling landmarks on the original images it was modified to save detection
 results to the central database (PostgreSQL). The database server, credentials
-and directory containing the given images are specified in a YAML configuration
+and directory containing the given images are specified in a \ac{YAML} configuration
 file which is passed as the only argument to the modified executable.
 
 \subsection{Face detection job prepare tool}
@@ -259,8 +259,8 @@ The entire data analysis and classification stage was implemented in Python
 relying on a number of additional packages for image processing, linear
 algebra, machine learning and plotting. The dependencies for this project can
 be found in the \texttt{requirements.txt} file in the \texttt{data-analysis}
-repository. The same file is also used by \texttt{pip}\footnote{Popular Python
-package manager.} to download all these dependencies at once.
+repository. The same file is also used by \ac{pip} to download all these
+dependencies at once.
 
 Unfortunately, not all dependencies could be added to the requirements file as
 many of them also depend on certain DEB packages. In order to mitigate these

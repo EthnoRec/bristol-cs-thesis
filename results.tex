@@ -84,52 +84,105 @@ normalised frequencies for all detections. Higher is better.}
 \label{fig:results:fd:scores_hist}
 \end{figure}
 
-\Cref{fig:results:fd:good_detected} and \Cref{fig:results:fd:other_detected}
-show examples of face detections with various scores.
+\Cref{fig:results:fd:scores} shows examples of face detections with various
+scores. Cropped foreheads, blurriness, sunglasses and small faces are some
+obvious reasons why a face detection might have received a low score.
+Irrelevant objects such as dogs were also a common pattern among the low
+scoring detections. Many low scores can also be attributed to the false
+positives of the face detector.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[b]{0.3\textwidth}
-      \includegraphics[width=\textwidth]{figures/results/detected_cff0618f-f631-4b0d-80d9-f582fee46fad}
-      \caption{Score=1.4313}
-      \label{fig:results:fd:good_detected1}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
-      \includegraphics[width=\textwidth]{figures/results/detected_50508cb1-814e-4374-bf07-cef5c301c3c0}
-      \caption{Score=1.20387}
-      \label{fig:results:fd:good_detected2}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
-      \includegraphics[width=\textwidth]{figures/results/detected_da153846-1afe-4b36-880a-bf8764bfd935}
-      \caption{Score=1.09232}
-      \label{fig:results:fd:good_detected3}
-    \end{subfigure}
-\caption{Three examples of high-scoring face detections.}
-\label{fig:results:fd:good_detected}
-\end{figure}
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[t]{0.3\textwidth}
-      \includegraphics[width=\textwidth]{figures/results/detected_q3_15c3f02d-31c6-4955-8d05-c05029cdb473}
-      \caption{Face detection with score=0.0651244 in upper quartile}
-      \label{fig:results:fd:q3_detected2}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
-      \includegraphics[width=\textwidth]{figures/results/detected_median_fcb1d3ed-7867-40ba-9691-8cd1f59dc36b}
-      \caption{Face detection with score=-0.108765 around the median}
-      \label{fig:results:fd:median_detected1}
-    \end{subfigure}
-    \begin{subfigure}[t]{0.3\textwidth}
-      \includegraphics[width=\textwidth]{figures/results/detected_q1_f1c5f486-1697-4089-9bb6-7962d7db630c}
-      \caption{Face detection with score=-0.517613 in lower quartile}
-      \label{fig:results:fd:q1_detected3}
-    \end{subfigure}
-\caption{Examples of inferior face pictures. Cropped foreheads, blurriness,
-sunglasses and small faces are some obvious reasons why a face detection might
-have received a low score.}
-\label{fig:results:fd:other_detected}
-\end{figure}
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}       % "top" strut
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}} % "bottom" strut
+\newcommand{\TBstrut}{\Tstrut\Bstrut} % top&bottom struts
+\begin{table}[ht!]
+    \begin{center}
+        \begin{tabular}{c|c|c}
+            \toprule
+            Low score & Median score & High score \\
+
+
+\midrule \multicolumn{3}{c}{Mumbai, India} \TBstrut \\ \midrule 
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/male/lq/18a4c991-2a46-486f-9d45-c7e9f12bd291.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/male/lq/75672244-f5d1-4e4f-8550-87dba909361c.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/male/mq/9ad2817e-1483-43c7-96cc-677aa1e9f6c6.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/male/mq/36aa377f-4ada-48b2-9848-82574f3636e0.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/male/hq/4f32013d-1da1-46bd-8ca8-b0e3ce13b1ce.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/male/hq/6177e04d-50d1-48df-8ffa-c51c154e7db4.jpeg}
+\TBstrut \\ 
+
+
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/female/lq/74f643a5-514a-4e92-b147-773e0be8ba78.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/female/lq/14a21a35-4bba-4051-b91e-646f88eb9acd.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/female/mq/cf395cd4-547a-481d-9c0d-953a14549f01.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/female/mq/87d904ba-098a-4a1d-8b61-85694dbdae95.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/female/hq/9855e182-7d75-4cb7-81d7-4f0edd1046d5.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/india/female/hq/ce8a7718-685f-4e26-8b66-5ee4d3111d6e.jpeg}
+\TBstrut \\ 
+
+
+\midrule \multicolumn{3}{c}{Belo Horizonte, Brazil} \TBstrut \\ \midrule 
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/male/lq/e0e544f2-545c-41b1-98a0-cbb3aaaa76bf.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/male/lq/e3bb800b-cf52-4a85-9972-6b47c83f1c15.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/male/mq/27dd28de-d3d6-46d0-8e9e-4bb2fa6c7714.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/male/mq/7dfae586-af1b-4c07-9e00-d25f47f2c229.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/male/hq/ca4b442f-8d1a-486c-8d5b-9d7709a9849e.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/male/hq/06312eb0-93de-407c-85bf-4cddce28f47f.jpeg}
+\TBstrut \\ 
+
+
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/female/lq/aa05c99f-ee93-48a1-8806-1a1a87b21b71.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/female/lq/387937bc-edc8-4336-8991-6c4745431122.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/female/mq/27193b66-7196-4b0c-bbac-e9a1ed259e93.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/female/mq/f10dcd8c-e4fc-4fd5-8703-62452512f21c.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/female/hq/ff51f9c4-9655-41e2-8696-55e989dfa5c3.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/brazil/female/hq/53ffce4e-fa85-49f7-8384-603cb3e15b9d.jpeg}
+\TBstrut \\ 
+
+
+\midrule \multicolumn{3}{c}{Guadalajara, Mexico} \TBstrut \\ \midrule 
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/male/lq/f045e2cf-3131-4da5-8479-4ec6ce0d9232.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/male/lq/5de8479a-84a8-4dd0-8762-7726fdce6f37.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/male/mq/336c7aa9-b426-4cd9-88fe-7b7238190bda.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/male/mq/f1562834-ee8d-4012-8b28-94b2a4872207.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/male/hq/becf7959-ac84-4056-8c93-48e78ea54a56.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/male/hq/4e01b48f-0135-4b78-87fd-dbbed015be65.jpeg}
+\TBstrut \\ 
+
+
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/female/lq/c2c95a2c-293a-4ca8-83d4-a017bb5fabf5.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/female/lq/366053f9-8acc-49a4-83ff-4e26646b4ac4.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/female/mq/e076cb1c-95ed-49e5-9c3e-6c980882e1d2.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/female/mq/1d655959-309a-46a9-8338-eecf05251e84.jpeg}
+&
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/female/hq/6a15e01f-3f9b-4d57-a4a8-bd26889f2f07.jpeg}
+\includegraphics[height=2.2cm,width=2.2cm]{figures/results/detections/mexico/female/hq/dc74a9a6-8af7-4cae-84a1-181ddf6f6db7.jpeg}
+\TBstrut \\ 
+
+
+
+
+            \bottomrule
+
+
+        \end{tabular}
+    \end{center}
+    \caption{Sample images of face detections for all classes, genders and
+    score categories. Median score implies that the image received a score
+which is within $0.1$ of the median score ($-0.108765$).}
+    \label{fig:results:fd:scores}
+\end{table}
 
 
 \section{Data analysis and classification}
@@ -231,19 +284,17 @@ each group as scored by the face detector. The 1800 images were randomly split
 into training set (80\%) and test set (20\%), maintaining equal numbers of
 samples in each class for each iteration of 6-fold cross validation. 
 
-
-\subsection{Misclassified examples}
-\begin{figure}
+\begin{figure}[!htb]
     \centering
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
       \includegraphics[width=\textwidth]{figures/results/misclassification/india-india.jpg}
       \caption{Correctly classified as Indian}
     \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
       \includegraphics[width=\textwidth]{figures/results/misclassification/india-brazil.jpg}
       \caption{Misclassified as Brazilian}
     \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
       \includegraphics[width=\textwidth]{figures/results/misclassification/india-mexico.jpg}
       \caption{Misclassified as Mexican}
     \end{subfigure}
@@ -251,17 +302,17 @@ samples in each class for each iteration of 6-fold cross validation.
 \label{fig:results:dc:misclass:india}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htb]
     \centering
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
       \includegraphics[width=\textwidth]{figures/results/misclassification/brazil-brazil.jpg}
       \caption{Correctly classified as Brazilian}
     \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
       \includegraphics[width=\textwidth]{figures/results/misclassification/brazil-india.jpg}
       \caption{Misclassified as Indian}
     \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
         \includegraphics[width=\textwidth]{figures/results/misclassification/brazil-mexico.jpg}
       \caption{Misclassified as Mexican}
     \end{subfigure}
@@ -269,17 +320,17 @@ samples in each class for each iteration of 6-fold cross validation.
 \label{fig:results:dc:misclass:brazil}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[!htb]
     \centering
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
       \includegraphics[width=\textwidth]{figures/results/misclassification/mexico-mexico.jpg}
       \caption{Correctly classified as Mexican}
     \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
       \includegraphics[width=\textwidth]{figures/results/misclassification/mexico-india.jpg}
       \caption{Misclassified as Indian}
     \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[t]{0.3\textwidth}
         \includegraphics[width=\textwidth]{figures/results/misclassification/mexico-brazil.jpg}
       \caption{Misclassified as Brazilian}
     \end{subfigure}

@@ -32,7 +32,8 @@
 \usepackage{booktabs}
 \usepackage{xspace}
 \usepackage{cancel}
-\usepackage[printonlyused,withpage]{acronym}
+\usepackage[printonlyused,withpage,footnote]{acronym}
+
 \usepackage{rotating}
 \usepackage{cite}
 \usepackage{array}
@@ -107,9 +108,9 @@
 \setsansfont[Scale=0.9]{\sffont}
 
 %acronyms
-\renewcommand*{\acfsfont}[1]{{\normalsize\upshape #1}}
-\renewcommand*{\acffont}[1]{{\normalsize\itshape #1}}
-\renewcommand{\vec}[1]{\mathbf{#1}}
+%\renewcommand*{\acfsfont}[1]{{\normalsize\upshape #1}}
+%\renewcommand*{\acffont}[1]{{\normalsize\itshape #1}}
+%\renewcommand{\vec}[1]{\mathbf{#1}}
 
 
 % hypenations
@@ -138,6 +139,7 @@
 \setlength{\trimedge}{\stockwidth}
 \addtolength{\trimedge}{-\paperwidth}
 \checkandfixthelayout
+
 
 % chapter style:
 \makeatletter
@@ -305,17 +307,13 @@
 
 \include{introduction}
 
-\let\stdsection\section
-\renewcommand\section{\newpage\stdsection}
+%\let\stdsection\section
+%\renewcommand\section{\newpage\stdsection}
 
 \include{background}
 \include{spec}
 \include{impl}
 \include{results}
-%\include{host}
-%\include{web}
-%\include{correlation}
-%\include{conclusions}
 
 \backmatter
 
